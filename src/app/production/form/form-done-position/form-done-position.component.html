@@ -1,0 +1,69 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formDonePosition" class="sb-form">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <p-toggleButton
+          [formControl]="formDonePosition.get('completed')"
+          (ngModelChange)="changeCompleted()"
+          onLabel="Wykonano"
+          offLabel="Nie wykonano"
+          onIcon="pi pi-check"
+          offIcon="pi pi-times"
+        ></p-toggleButton>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="dateCompletedPosition"
+          >Data Wykonania</label
+        >
+        <p-calendar
+          styleClass="w-100"
+          appendTo="body"
+          dateFormat="yy-mm-dd"
+          [locale]="pl"
+          [formControl]="formDonePosition.get('dateCompletedPosition')"
+          [showIcon]="true"
+        >
+        </p-calendar>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie aktualizowania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateDoneInformation()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

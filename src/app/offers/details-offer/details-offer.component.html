@@ -1,0 +1,709 @@
+<div class="container-offer-details">
+  <div class="row mb-2">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="backClicked()"
+        icon="pi pi-chevron-left"
+        style="width: 50px !important"
+        class="p-button-sm sb-button blue back"
+      ></button>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div class="float-right" *ngIf="offer.myCompany.logoLink">
+        <img height="50px" [src]="offer.myCompany.logoLink" alt="" />
+      </div>
+      <p *ngIf="!offer.myCompany.logoLink" class="float-right">
+        {{ offer?.myCompany.name }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-ticket"></i>
+        </div>
+        <div class="stats-numbers">{{ offer?.offerNumber }}</div>
+        <div class="stats-subtitle">Numer oferty</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="stats-numbers">{{ offer?.client.name }}</div>
+        <div class="stats-subtitle">Kontrahent</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stats-numbers">
+          {{ statusOfferSwitch(offer.offerStatus) }}
+        </div>
+        <div class="stats-subtitle">Status</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-calendar"></i>
+        </div>
+        <div class="stats-numbers">
+          {{ offer?.offerDate | date: "dd.MM.yyyy" }}
+        </div>
+        <div class="stats-subtitle">Data oferty</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-plus-circle"></i>
+        </div>
+        <div class="stats-numbers">{{ offer?.createdBy }}</div>
+        <div class="stats-subtitle">Oferta utworzona przez</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-money-bill"></i>
+        </div>
+        <div class="row w-100 m-0" style="top: -12px; position: relative">
+          <div class="col-sm-6 col-md-6 col-lg-6 stats-table-clients">
+            <table>
+              <tbody>
+                <tr>
+                  <th class="text-left">Dopłata</th>
+                  <td class="text-center">
+                    {{ offer?.client.helper_additional }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-left">Koszt</th>
+                  <td class="text-center">{{ offer?.client.helper_cost }}</td>
+                </tr>
+                <tr>
+                  <th class="text-left">Ustawienie</th>
+                  <td class="text-center">
+                    {{ offer?.client.helper_setUpCost }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-left revers">Zm. koloru</th>
+                  <td class="text-center">
+                    {{ offer?.client.helper_costChangeColor }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 stats-table-clients">
+            <table>
+              <thead>
+                <th></th>
+                <th class="text-center">Kurs</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>ALU</th>
+                  <td class="text-center">
+                    {{ helper ? helper.exchangeRateAlu : "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>PCV</th>
+                  <td class="text-center">
+                    {{ helper ? helper.exchangeRatePcv : "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-table"></i>
+        </div>
+        <div class="stats-table">
+          <table>
+            <thead>
+              <th class="text-left">Metry</th>
+              <th class="text-center">Łatwe (PCV)</th>
+              <th class="text-center">Trudne (PCV)</th>
+              <th class="text-center">Łatwe (ALU)</th>
+              <th class="text-center">Trudne (ALU)</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left">0-50</td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mEasyTo50 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mHardTo50 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mEasyTo50 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mHardTo50 }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-left">51-150</td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mEasyTo150 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mHardTo150 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mEasyTo150 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mHardTo150 }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-left">151-500</td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mEasyTo500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mHardTo500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mEasyTo500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mHardTo500 }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-left">pow. 500</td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mEasyAbove500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_pcv_mHardAbove500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mEasyAbove500 }}
+                </td>
+                <td class="text-center">
+                  {{ offer.client.helper_alu_mHardAbove500 }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stats-subtitle fix">Zakresy klienta</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-cog"></i>
+        </div>
+        <div class="stats-button">
+          <button
+            pButton
+            type="button"
+            (click)="showDialogToUpdateHelperOffer()"
+            label="Zmień parametry"
+            class="p-button-sm sb-button gray"
+            pTooltip="Zmiana ustawień stałych kontrahenta"
+          ></button>
+          <button
+            pButton
+            type="button"
+            (click)="showDialogToUpdateHelperOfferRange()"
+            label="Zmień zakresy"
+            class="p-button-sm sb-button gray"
+            pTooltip="Zmiana ustawień stałych kontrahenta"
+          ></button>
+        </div>
+        <div class="stats-subtitle fix">Ustawienia</div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="row sb-progress-bar"
+    [ngClass]="{ hide: productionService.loadingDataValue >= 100 }"
+  >
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <p-progressBar
+        [value]="productionService.loadingDataValue"
+      ></p-progressBar>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <p-toolbar styleClass="sb-toolbar">
+        <div class="p-toolbar-group-left">
+          <button
+            [disabled]="productionService.loadingDataValue != 100"
+            pButton
+            pRipple
+            type="button"
+            (click)="showDialogToAddOfferPosition()"
+            pTooltip="Dodanie pojedyńczej pozycji"
+            icon="pi pi-plus"
+            label="Pojedyńcza pozycja"
+            class="p-button-sm sb-button blue"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="showDialogToAddCostBuyFilm()"
+            pTooltip="Kosztu zakupu okleiny"
+            icon="pi pi-money-bill"
+            label="Koszt zakupu okl."
+            class="p-button-sm sb-button gray"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="showChangeStatusDialog()"
+            pTooltip="Zmiana statusu oferty"
+            icon="pi pi-check-circle"
+            label="Zmiana statusu"
+            class="p-button-sm sb-button gray"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            (click)="showDialogToSelectPrint()"
+            pTooltip="Drukowanie"
+            icon="pi pi-print"
+            label="Drukowanie"
+            class="p-button-sm sb-button yellow ml-2"
+          ></button>
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <button
+            pButton
+            type="button"
+            (click)="deleteOffer()"
+            pTooltip="Usunięcie oferty"
+            pTooltipClass="tooltip-red"
+            icon="pi pi-trash"
+            class="p-button-sm sb-button red"
+          ></button>
+        </div>
+      </p-toolbar>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p-tabView>
+        <p-tabPanel header="Edycja" leftIcon="pi pi-pencil">
+          <div class="row w-100 m-0">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <p-table
+                [loading]="loadingTable"
+                [value]="offerPositions"
+                [autoLayout]="true"
+                [rowHover]="true"
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first} do {last} z {totalRecords}"
+              >
+                <ng-template pTemplate="header">
+                  <tr class="p-header">
+                    <th class="nr">Nr.</th>
+                    <th class="name-k">Nazwa kształ.</th>
+                    <th class="number-k">Numer kształ.</th>
+                    <th class="warranty">Gwarancja</th>
+                    <th class="ph-side">Strony</th>
+                    <th class="edit-col" style="min-width: 80px"></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-posData>
+                  <tr class="p-body">
+                    <td class="nr">{{ posData.positionNumber }}</td>
+                    <td class="name-k">{{ posData.profilType }}</td>
+                    <td class="number-k">{{ posData.profilNumber }}</td>
+
+                    <td class="warranty text-center">
+                      <span
+                        [class]="'warranty-badge status-' + posData.warranty"
+                      >
+                        {{ posData.warranty ? "TAK" : "NIE" }}
+                      </span>
+                    </td>
+
+                    <td class="pb-side">
+                      <p-table
+                        [value]="posData.offerPositionSides"
+                        [autoLayout]="true"
+                        [rowHover]="true"
+                      >
+                        <ng-template pTemplate="header">
+                          <tr class="pside-header">
+                            <th class="side">Strona</th>
+                            <th class="film-number">Numer Okl.</th>
+                            <th class="film-width">Szer. Okl.</th>
+                            <th class="pln">PLN/mb</th>
+                            <th class="quantity">Ilość mb</th>
+                            <th class="sum">Razem PLN</th>
+                            <th class="u" pTooltip="Ustawienie maszyny">U*</th>
+                            <th class="p" pTooltip="Usługa w pakiecie">P*</th>
+                            <th class="zm" pTooltip="Zmiana koloru">ZM*</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-pozSide>
+                          <tr class="pside-body">
+                            <td class="side">{{ pozSide.side }}</td>
+                            <td class="film-number">
+                              {{ pozSide.filmNumber }}
+                            </td>
+                            <td class="film-width">{{ pozSide.filmWidth }}</td>
+                            <td class="pln">{{ pozSide.plnMb }}</td>
+                            <td class="quantity">{{ pozSide.quantityMb }}</td>
+                            <td class="sum">{{ pozSide.togetherPay }}</td>
+                            <td class="u">{{ pozSide.costSetup }}</td>
+                            <td class="p">{{ pozSide.costSet }}</td>
+                            <td class="zm">
+                              {{
+                                pozSide.costChangeColor
+                                  ? pozSide.costChangeColor
+                                  : ""
+                              }}
+                            </td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </td>
+                    <td class="edit-col">
+                      <button
+                        pButton
+                        pRipple
+                        appPermission
+                        permission="offerWrite"
+                        type="button"
+                        [disabled]="productionService.loadingDataValue != 100"
+                        (click)="showDialogToUpdateOfferPosition(posData)"
+                        icon="pi pi-pencil"
+                        class="p-button-sm sb-button blue"
+                      ></button>
+                      <button
+                        pButton
+                        pRipple
+                        appPermission
+                        permission="offerDelete"
+                        type="button"
+                        (click)="deleteOfferRow(posData)"
+                        icon="pi pi-trash"
+                        class="p-button-sm ml-1 sb-button red"
+                      ></button>
+
+                      <button
+                        *ngIf="auth.isAdmin"
+                        pButton
+                        pRipple
+                        type="button"
+                        (click)="dupPosition(posData)"
+                        icon="pi pi-copy"
+                        class="p-button-sm ml-1 sb-button gray"
+                      ></button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                  <tr>
+                    <td colspan="4" class="p-text-right"></td>
+                    <td colspan="2" class="p-0">
+                      <div class="sum-table" style="float: right">
+                        <div class="row m-0 sum-table-row">
+                          <div class="text-center" style="width: 120px">
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="
+                                  height: 50px;
+                                  border: 1px solid #c8c8c8;
+                                  border-bottom: 0;
+                                "
+                              >
+                                Suma w PLN
+                              </div>
+                            </div>
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="border: 1px solid #c8c8c8"
+                              >
+                                {{ offer.sumAllPositionsPln }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-center" style="width: 180px">
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="
+                                  height: 50px;
+                                  border: 1px solid #c8c8c8;
+                                  border-bottom: 0;
+                                "
+                              >
+                                Suma dopłat w PLN
+                              </div>
+                            </div>
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="border: 1px solid #c8c8c8"
+                              >
+                                {{ offer.sumSetUpCost }}
+                              </div>
+                              <div
+                                class="col"
+                                style="
+                                  border: 1px solid #c8c8c8;
+                                  border-left: 0;
+                                "
+                              >
+                                {{ offer.sumSetCost }}
+                              </div>
+                              <div
+                                class="col"
+                                style="
+                                  border: 1px solid #c8c8c8;
+                                  border-left: 0;
+                                "
+                              >
+                                {{ offer.sumCostChangeColor }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 sum-table-row">
+                          <div class="text-center" style="width: 300px">
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="
+                                  border: 1px solid #c8c8c8;
+                                  border-bottom: 0;
+                                "
+                              >
+                                Razem netto w PLN
+                              </div>
+                            </div>
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="border: 1px solid #c8c8c8"
+                              >
+                                {{ offer.sumAllNetto }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="row m-0 sum-table-row"
+                          *ngIf="offer.costNettoBuyFilm"
+                        >
+                          <div class="text-center" style="width: 300px">
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="
+                                  border: 1px solid #c8c8c8;
+                                  border-bottom: 0;
+                                "
+                              >
+                                Zakup okleiny netto w PLN
+                              </div>
+                            </div>
+                            <div class="row w-100 m-0">
+                              <div
+                                class="col"
+                                style="border: 1px solid #c8c8c8"
+                              >
+                                {{ offer.costNettoBuyFilm }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td [attr.colspan]="6" style="text-align: left">
+                      Brak danych.
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="Notatki" leftIcon="pi pi-align-justify">
+          <app-timeline-widget
+            [offerNumber]="offerNumber"
+            [offerNotes]="offerNotes"
+          ></app-timeline-widget>
+        </p-tabPanel>
+        <p-tabPanel header="Ustawienia" leftIcon="pi pi-print">
+          <app-print-offer-settings
+            [offer]="offer"
+            (refresh)="loadData()"
+          ></app-print-offer-settings>
+        </p-tabPanel>
+        <p-tabPanel header="Podgląd" leftIcon="pi pi-search">
+          <app-view-offer [offer]="offer"></app-view-offer>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PRINT ================= -->
+<p-dialog
+  header="Drukowanie"
+  [(visible)]="displayPrintOffer"
+  styleClass="print_dialog"
+>
+  <div class="sb-dialog-content">
+    <div class="row print_choose_buttons">
+      <div class="col">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Drukowanie oferty"
+          (click)="printOffer()"
+          class="sb-button gray w-100 h-100"
+        ></button>
+      </div>
+
+      <div class="col">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Drukowanie zakresu cen"
+          (click)="printOfferCosts()"
+          class="sb-button gray w-100 h-100"
+        ></button>
+      </div>
+    </div>
+  </div>
+  <div class="sb-dialog-footer">
+    <div class="sb-btn-close">
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="closePrintOffer()"
+        pTooltip="Anulowanie drukowania"
+        label="Anuluj"
+        icon="pi pi-times"
+        class="p-button-sm sb-button o-gray"
+      ></button>
+    </div>
+    <div class="sb-btn-save">
+      <p-progressSpinner
+        *ngIf="loadingPrintOffer"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- ================= STATUS CHANGE ================= -->
+<p-dialog header="Zmiana statusu" [(visible)]="displayChangeStatus">
+  <div class="sb-dialog-content">
+    <div class="row">
+      <div class="col">
+        <p-dropdown
+          #of
+          placeholder="Wybierz Status"
+          [(ngModel)]="modelStatusChange"
+          [options]="allStatus"
+          [filter]="true"
+          filterBy="name,value"
+          styleClass="w-100"
+          appendTo="body"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="sb-dialog-footer">
+    <div class="sb-btn-close">
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayChangeStatus = false"
+        pTooltip="Anulowanie"
+        label="Anuluj"
+        icon="pi pi-times"
+        class="p-button-sm sb-button o-gray"
+      ></button>
+    </div>
+    <div class="sb-btn-save">
+      <button
+        [disabled]="loadingChangeStatus"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateOfferStatus()"
+        pTooltip="Aktualizacja statusu"
+        label="Zapisz"
+        icon="pi pi-check"
+        class="p-button-sm sb-button green"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingChangeStatus"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+</p-dialog>

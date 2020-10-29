@@ -1,0 +1,56 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formChangeStatus" class="sb-form">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="statusOrder">Status Zlecenia</label>
+        <p-dropdown
+          appendTo="body"
+          placeholder="Wybierz status"
+          id="statusOrder"
+          styleClass="w-100"
+          [options]="_statusOrder"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formChangeStatus.get('statusOrder')"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie aktualizowania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="changeStatus()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

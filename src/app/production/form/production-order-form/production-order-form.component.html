@@ -1,0 +1,143 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formProductionOrder" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="myCompany"
+          >Zlecenie do firmy *</label
+        >
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          placeholder="Wybierz firmę"
+          id="myCompany"
+          [options]="productionService.myCompanyData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formProductionOrder.get('myCompany')"
+          required
+        ></p-dropdown>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProductionOrder.get('myCompany').hasError('required') &&
+            formProductionOrder.get('myCompany').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="client">Klient *</label>
+        <p-dropdown
+          placeholder="Wybierz klienta"
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          id="client"
+          [options]="productionService.clientData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formProductionOrder.get('client')"
+          required
+        >
+        </p-dropdown>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProductionOrder.get('client').hasError('required') &&
+            formProductionOrder.get('client').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="numberClientOrder"
+          >Numer zlecenia klienta</label
+        >
+        <input
+          size="30"
+          pInputText
+          [formControl]="formProductionOrder.get('numberClientOrder')"
+          placeholder="nr zlec klienta"
+          type="text"
+          id="numberClientOrder"
+          class="form-control ui-inputtext ui-corner-all ui-state-default ui-widget"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="dateAcceptanceOrder"
+          >Data Przyjęcia</label
+        >
+        <p-calendar
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          [monthNavigator]="true"
+          [locale]="pl"
+          [formControl]="formProductionOrder.get('dateAcceptanceOrder')"
+          [showIcon]="true"
+          required
+        >
+        </p-calendar>
+      </div>
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="orderNumber">Numer zlecenia**</label>
+        <input
+          pInputText
+          [pKeyFilter]="blockSpecial"
+          [formControl]="formProductionOrder.get('orderNumber')"
+          placeholder=""
+          type="text"
+          id="orderNumber"
+          tooltipEvent="focus"
+          pTooltip="Pole przeznaczone do wpisania numeru zlecenia jeżeli chcemy ustawić indywidualny. Pozostawienie pustego pola spowoduje automatyczne wygenerowanie numeru zlecenia."
+          class="form-control ui-inputtext ui-corner-all ui-state-default ui-widget"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="formProductionOrder.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addProductionOrder()"
+      pTooltip="Dodaj zlecenie"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

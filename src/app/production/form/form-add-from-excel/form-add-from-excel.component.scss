@@ -1,0 +1,34 @@
+.ex-size {
+    width: 800px;
+    height: auto;
+}
+
+.ex-content {
+}
+.ex-content-header {
+    margin: 1rem 0;
+}
+
+.ex-select-file {
+    padding: 3rem;
+    text-align: center;
+}
+
+.ex-table-1 {
+    display: inline-flex;
+    border: 1px solid #a6a6a6;
+    border-top: 0px;
+}
+
+.ex-table-1:first-child {
+    border-top: 1px solid #a6a6a6 !important;
+}
+
+.ex-table-2 {
+    border: 1px solid #a6a6a6;
+    border-top: 0px;
+}
+
+.ex-table-2:first-child {
+    border-top: 1px solid #a6a6a6 !important;
+}

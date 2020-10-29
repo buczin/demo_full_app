@@ -1,0 +1,208 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formUsedFilm" class="sb-form">
+    <div *ngIf="!updateUsedSide" class="row w-100 m-0">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+        <span><b>Aktualizuj zużycie dla strony</b></span>
+      </div>
+    </div>
+
+    <div *ngIf="!updateUsedSide" class="select-buttons row w-100 m-0 pt-2">
+      <div
+        *ngFor="let item of orderData.postionSide"
+        class="col-sm-12 col-md-12 col-lg-12 p-2 d-flex justify-content-center"
+      >
+        <button
+          style="width: 100px; height: 50px"
+          pButton
+          type="button"
+          (click)="selectSide(item)"
+          [label]="item.side"
+          class="sb-button gray"
+        ></button>
+        <div>{{ item.filmWidth }}</div>
+      </div>
+    </div>
+
+    <div *ngIf="updateUsedSide" class="row w-100 m-0">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-6 pb-4">
+            <div class="text-center pb-2">
+              <span>Dane</span>
+            </div>
+            <div class="table-addzuz">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Strona</th>
+                    <th>Nr. okl.</th>
+                    <th>Szer. okl.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {{ updateUsedSide?.side }}
+                    </td>
+                    <td>
+                      {{ updateUsedSide?.filmNumber }}
+                    </td>
+                    <td>
+                      {{ updateUsedSide?.filmWidth }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-6 col-lg-6 pb-4">
+            <div class="text-center pb-2">
+              <span>Wymiary</span>
+            </div>
+            <div class="table-addzuz">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ilość</th>
+                    <th>Długość</th>
+                    <th>Suma Mb</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of updateUsedSide.profilDimensions">
+                    <td>
+                      {{ item.quantity }}
+                    </td>
+                    <td>
+                      {{ item.length }}
+                    </td>
+                    <td>
+                      {{ item.sumMb }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div formArrayName="usedFilm">
+              <div
+                class="row rowsides-use"
+                *ngFor="let use of usedFilm.controls; index as j"
+              >
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                  <div
+                    class="row align-items-center flex-nowrap"
+                    [formGroupName]="j"
+                  >
+                    <div class="col-1 col-sm-1 col-md-1 col-lg-1 countField">
+                      <span>{{ j + 1 }}</span>
+                    </div>
+
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 p-1">
+                      <label class="sb-small-label" for="width"
+                        >Szerokość (mm)</label
+                      >
+                      <input
+                        type="number"
+                        inputmode="numeric"
+                        min="0"
+                        step="1"
+                        formControlName="width"
+                        autocomplete="off"
+                        showButtons="true"
+                        pInputText
+                        class="w-100"
+                      />
+                    </div>
+
+                    <div class="col-5 col-sm-5 col-md-5 col-lg-5 p-1">
+                      <label class="sb-small-label" for="length"
+                        >Długość (mb)</label
+                      >
+                      <input
+                        type="number"
+                        inputmode="numeric"
+                        min="0"
+                        step="1"
+                        formControlName="length"
+                        autocomplete="off"
+                        showButtons="true"
+                        pInputText
+                        class="w-100"
+                      />
+                    </div>
+
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 p-0 useClose">
+                      <button
+                        pTooltip="Usuń zużycie"
+                        class="p-button-sm sb-button red"
+                        type="button"
+                        pButton
+                        icon="pi pi-times"
+                        (click)="removeUsedFilm(j)"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 new">
+                  <button
+                    pTooltip="Dodaj wymiar"
+                    class="sb-button blue"
+                    type="button"
+                    pButton
+                    icon="pi pi-plus"
+                    (click)="addUsedFilm()"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save" *ngIf="updateUsedSide">
+    <button
+      [disabled]="formUsedFilm.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateUsedFilmInfoOnSide()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

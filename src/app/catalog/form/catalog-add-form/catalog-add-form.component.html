@@ -1,0 +1,375 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formCatalog" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12 text-center">
+            <span><b>RODZAJ</b></span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="systemProfil">System</label>
+
+            <p-autoComplete
+              [style]="{ width: '100%' }"
+              [minLength]="1"
+              [formControl]="formCatalog.get('systemProfil')"
+              [suggestions]="filteredSystems"
+              (completeMethod)="filterSystems($event)"
+              [dropdown]="true"
+              placeholder="Wybierz system"
+              field="name"
+            >
+              <ng-template let-systemProfil pTemplate="item">
+                <div class="catalog-dropdown-system">
+                  <div class="row">
+                    <div class="col">
+                      {{ systemProfil.name }}
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-autoComplete>
+
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formCatalog.get('systemProfil').hasError('required') &&
+                formCatalog.get('systemProfil').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="number">Numer*</label>
+            <input
+              pInputText
+              class="fullwidth"
+              [formControl]="formCatalog.get('number')"
+              type="text"
+              id="number"
+              required
+              autofocus
+              autocomplete="off"
+            />
+
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formCatalog.get('number').hasError('required') &&
+                formCatalog.get('number').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formCatalog.get('number').hasError('catalogExists') &&
+                formCatalog.get('number').touched
+              "
+            >
+              ten numer znajduje się w katalogu
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="profileType"
+              >Rodzaj Ksztaltownika*</label
+            >
+            <input
+              pInputText
+              class="fullwidth"
+              (ngModelChange)="dupliName($event)"
+              [formControl]="formCatalog.get('profileType')"
+              type="text"
+              id="profileType"
+              required
+            />
+
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formCatalog.get('profileType').hasError('required') &&
+                formCatalog.get('profileType').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="offerName"
+              >Nazwa na ofercie*</label
+            >
+            <input
+              pInputText
+              class="fullwidth"
+              [formControl]="formCatalog.get('offerName')"
+              type="text"
+              id="offerName"
+              required
+            />
+
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formCatalog.get('offerName').hasError('required') &&
+                formCatalog.get('offerName').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+          </div>
+        </div>
+
+        <div class="row pt-1">
+          <div style="padding-left: 15px">
+            <p-checkbox
+              [formControl]="formCatalog.get('hard')"
+              [binary]="true"
+              label="Trudny"
+            ></p-checkbox>
+          </div>
+        </div>
+
+        <div class="row pt-1">
+          <div style="padding-left: 15px">
+            <p-checkbox
+              [formControl]="formCatalog.get('alu')"
+              [binary]="true"
+              label="Profil aluminiowy"
+            >
+            </p-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12 text-center">
+            <span><b>WYMIARY</b></span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimOuter">Zewnetrzny</label>
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimOuter')"
+              id="dimOuter"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimInner">Wewnetrzny</label>
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimInner')"
+              id="dimInner"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimOneSide">Jednostronny</label>
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimOneSide')"
+              id="dimOneSide"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimTwoSide">Obustronny</label>
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimTwoSide')"
+              id="dimTwoSide"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="dimCenterSide">Środek</label>
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimCenterSide')"
+              id="dimCenterSide"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimTwoSideOuter"
+              >Obu. Zewnetrzny</label
+            >
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimTwoSideOuter')"
+              id="dimTwoSideOuter"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+          <div class="col-g-12 col-md-6 col-lg-6">
+            <label class="sb-small-label" for="dimTwoSideInner"
+              >Obu. Wewnetrzny</label
+            >
+            <p-inputNumber
+              class="fullwidth"
+              [formControl]="formCatalog.get('dimTwoSideInner')"
+              id="dimTwoSideInner"
+              :min="0"
+              suffix=" mm"
+              autocomplete="off"
+              showButtons="true"
+            >
+            </p-inputNumber>
+          </div>
+        </div>
+
+        <div class="row pt-1">
+          <div style="padding-left: 15px">
+            <p-checkbox
+              [formControl]="formCatalog.get('actualMeasurement')"
+              [binary]="true"
+              label="Pomiar rzeczywisty (zweryfikowany)"
+            ></p-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="desc">Opis</label>
+        <p-editor
+          [formControl]="formCatalog.get('comments')"
+          [style]="{ height: '150px' }"
+        >
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!catalogData"
+      [disabled]="formCatalog.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addNewCatalog()"
+      pTooltip="Dodaj nowy katalog"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="catalogData"
+      [disabled]="formCatalog.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateCatalog()"
+      pTooltip="Aktualizacja katalogu"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

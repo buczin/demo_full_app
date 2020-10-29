@@ -1,0 +1,108 @@
+<div class="ex-size">
+  <div class="ex-content">
+    <div class="ex-content-header pl-4 pr-4 pt-2">
+      <p-steps
+        [model]="items"
+        [(activeIndex)]="activeIndex"
+        [readonly]="true"
+      ></p-steps>
+    </div>
+
+    <!-- STEP 1 -->
+    <div [ngSwitch]="activeIndex">
+      <div *ngSwitchCase="0" class="ex-select-file pl-4 pr-4">
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
+
+      <!-- STEP 2 -->
+      <div *ngSwitchCase="1" class="ex-step2">
+        <div class="p-grid pl-4 pr-4 w-100 mt-3">
+          <div class="p-col-6">
+            <div class="pb-1"><span>Kolumny w kreatorze </span></div>
+            <div>
+              <div
+                class="p-1 ex-table-1 drag-column"
+                *ngFor="let item of columnsInOrder"
+                style="height: 40px"
+              >
+                <div style="width: 120px" class="item-appTable" class="p-1">
+                  <span>{{ item.name }}</span>
+                </div>
+                <div
+                  [id]="item.idApp"
+                  pDroppable="item"
+                  (onDrop)="drop($event)"
+                  style="width: 200px; border-left: 1px solid #a6a6a6"
+                  class="p-1"
+                >
+                  <span>{{ item.matchCol ? item.matchCol : "" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-col-6 drag-column pl-2">
+            <div class="pb-1"><span>Znalezione kolumny: </span></div>
+            <div>
+              <div
+                *ngFor="let item of copyColumnsName"
+                class="ex-table-2"
+                style="height: 40px; width: 200px"
+              >
+                <div
+                  pDraggable="item"
+                  (onDragStart)="dragStart(item)"
+                  (onDragEnd)="dragEnd()"
+                >
+                  <div class="p-2">
+                    <span>{{ item }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer mt-3"
+        >
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="step3()"
+            matTooltip="Analizuj pozycje"
+            label="Analiza"
+            matTooltipClass="tooltip-green"
+            icon="pi pi-check"
+            class="p-button-raised p-button-success p-button-sm"
+          ></button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div *ngSwitchCase="2" class="ex-step3">
+        <div *ngIf="step3Table" class="p-4">
+          <p-table [columns]="columnsInOrder" [value]="step3Table">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns">
+                  {{ col.name }}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr>
+                <td *ngFor="let col of columns">
+                  {{ rowData[col.matchCol] }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div *ngSwitchCase="3" class="ex-step4">step4</div>
+    </div>
+  </div>
+</div>

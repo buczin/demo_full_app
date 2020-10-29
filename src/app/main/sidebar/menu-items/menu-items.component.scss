@@ -1,0 +1,102 @@
+.menu-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100% - 10px);
+    width: 100%;
+    // padding-top: 25px;
+}
+.menu-items > li {
+    display: block;
+    padding: 0;
+    clear: right;
+}
+.menu-items > li:before {
+    display: table;
+    content: " ";
+    clear: both;
+}
+.menu-items > li > a {
+    font-family: "Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, sans-serif;
+    display: inline-block;
+    padding-left: 32px;
+    min-height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    clear: both;
+    color: #929aac;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 65%;
+    text-decoration: none;
+}
+.menu-items li:hover {
+    a {
+        color: #fff;
+    }
+    .icon-thumbnail {
+        color: #fff !important;
+    }
+}
+
+.menu-items > li > a > .title {
+    float: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 65%;
+    line-height: 28px;
+}
+
+.menu-items > li > a > .details {
+    font-size: 12px;
+    opacity: 0.4;
+    display: block;
+    clear: both;
+    line-height: 16px;
+}
+
+.icon-thumbnail {
+    display: -webkit-inline-box;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    background: 0 0;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    left: 0;
+    float: right;
+    margin-right: 14px;
+    color: #929aac;
+    -webkit-transition: -webkit-transform 0 cubic-bezier(0.05, 0.74, 0.27, 0.99) 0.4s;
+    transition: -webkit-transform 0 0.4s cubic-bezier(0.05, 0.74, 0.27, 0.99);
+    transition: transform 0 0.4s cubic-bezier(0.05, 0.74, 0.27, 0.99);
+    transition: transform 0 0.4s cubic-bezier(0.05, 0.74, 0.27, 0.99),
+        -webkit-transform 0 0.4s cubic-bezier(0.05, 0.74, 0.27, 0.99);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    font-family: "Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+    .menu-items > li > a > .title {
+        font-size: 20px;
+        line-height: 60px;
+    }
+}

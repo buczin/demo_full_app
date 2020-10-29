@@ -1,0 +1,264 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formClientHelper">
+    <div class="row">
+      <div class="col helper-table">
+        <div class="text-center" style="background-color: aquamarine">
+          <span style="text-transform: uppercase; font-weight: bold">PCV</span>
+        </div>
+        <table style="margin: 0 auto">
+          <thead>
+            <th class="text-left">Metry</th>
+            <th class="text-center">Łatwe</th>
+            <th class="text-center">Trudne</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0-50</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mEasyTo50')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mHardTo50')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>51-150</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mEasyTo150')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mHardTo150')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>151-500</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mEasyTo500')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_pcv_mHardTo500')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>pow. 500</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="
+                    formClientHelper.get('helper_pcv_mEasyAbove500')
+                  "
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="
+                    formClientHelper.get('helper_pcv_mHardAbove500')
+                  "
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col helper-table">
+        <div class="text-center mt-4" style="background-color: aquamarine">
+          <span style="text-transform: uppercase; font-weight: bold">ALU</span>
+        </div>
+        <table style="margin: 0 auto">
+          <thead>
+            <th class="text-left">Metry</th>
+            <th class="text-center">Łatwe</th>
+            <th class="text-center">Trudne</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0-50</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mEasyTo50')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mHardTo50')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>51-150</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mEasyTo150')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mHardTo150')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>151-500</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mEasyTo500')"
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="formClientHelper.get('helper_alu_mHardTo500')"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>pow. 500</td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="
+                    formClientHelper.get('helper_alu_mEasyAbove500')
+                  "
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  step=".1"
+                  [formControl]="
+                    formClientHelper.get('helper_alu_mHardAbove500')
+                  "
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie aktualizowania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateHelpers()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

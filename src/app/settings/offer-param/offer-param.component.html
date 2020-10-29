@@ -1,0 +1,790 @@
+<div class="container">
+  <div class="row mb-2 ml-0">
+    <button (click)="backClicked()" mat-raised-button>
+      <i class="pi pi-chevron-left"></i>
+    </button>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <h4>Aktualny kurs alu:</h4>
+      <h1>{{ helpers ? (helpers.exchangeRateAlu | number: "1.2-2") : "-" }}</h1>
+      <h4>Aktualny kurs pcv:</h4>
+      <h1>{{ helpers ? (helpers.exchangeRatePcv | number: "1.2-2") : "-" }}</h1>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormExchange = !displayFormExchange"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana kursu"
+      ></button>
+    </div>
+    <div class="col">
+      <h4>Domyślny koszt ustawienia</h4>
+      <h1>
+        {{ helpers ? (helpers.defaultClientSetUpCost | number: "1.2-2") : "-" }}
+      </h1>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormSetUpCost = !displayFormSetUpCost"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana kosztu ustawienia"
+      ></button>
+    </div>
+    <div class="col">
+      <h4>Domyślny koszt pakietu/kompletu</h4>
+      <h1>{{ helpers ? (helpers.defaultSetCost | number: "1.2-2") : "-" }}</h1>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormSetCost = !displayFormSetCost"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana ceny pakietu"
+      ></button>
+    </div>
+    <div class="col">
+      <h4>Domyślny koszt zmiany koloru</h4>
+      <h1>
+        {{ helpers ? (helpers.defaultCostChangeColor | number: "1.2-2") : "-" }}
+      </h1>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormChangeColor = !displayFormChangeColor"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana kosztu zmiany koloru"
+      ></button>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <h4>Domyślny tekst nagłówka oferty</h4>
+      <p *ngIf="helpers" [innerHTML]="helpers.defaultPrintTextHeader"></p>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormPrintText = !displayFormPrintText"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana tekstu"
+      ></button>
+    </div>
+    <div class="col">
+      <h4>Domyślny tekst opisu tabeli oferty</h4>
+      <p *ngIf="helpers" [innerHTML]="helpers.defaultPrintTextTableFotter"></p>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayFormPrintText = !displayFormPrintText"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana tekstu"
+      ></button>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <h4>Domyślne zakresy</h4>
+
+      <div class="stats-table">
+        <table>
+          <thead>
+            <th class="text-left">Metry</th>
+            <th class="text-center">Łatwe (PCV)</th>
+            <th class="text-center">Trudne (PCV)</th>
+            <th class="text-center">Łatwe (ALU)</th>
+            <th class="text-center">Trudne (ALU)</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left">0-50</td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mEasyTo50 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mHardTo50 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mEasyTo50 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mHardTo50 }}
+              </td>
+            </tr>
+            <tr>
+              <td class="text-left">51-150</td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mEasyTo150 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mHardTo150 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mEasyTo150 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mHardTo150 }}
+              </td>
+            </tr>
+            <tr>
+              <td class="text-left">151-500</td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mEasyTo500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mHardTo500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mEasyTo500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mHardTo500 }}
+              </td>
+            </tr>
+            <tr>
+              <td class="text-left">pow. 500</td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mEasyAbove500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_pcv_mHardAbove500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mEasyAbove500 }}
+              </td>
+              <td class="text-center">
+                {{ helpers?.default_helper_alu_mHardAbove500 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="displayCostsRange = !displayCostsRange"
+        icon="pi pi-money-bill"
+        class="p-button-raised p-button-secondary m-1"
+        style="height: 28px"
+        pTooltip="Zmiana zakresów"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Aktualizacja kursu"
+  [(visible)]="displayFormExchange"
+  class="no-padding-dialog"
+>
+  <form [formGroup]="formHelpers">
+    <div class="row w-100 m-0">
+      <div class="col p-4 d-flex justify-content-center">
+        <label class="sb-small-label" for="alu">ALU</label>
+        <p-inputNumber
+          inputId="alu"
+          [inputStyle]="{ width: '100px' }"
+          mode="decimal"
+          [formControl]="formHelpers.get('exchangeRateAlu')"
+          [showButtons]="true"
+          [step]="0.1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div class="row w-100 m-0">
+      <div class="col p-4 d-flex justify-content-center">
+        <label class="sb-small-label" for="pcv">PCV</label>
+        <p-inputNumber
+          inputId="pcv"
+          [inputStyle]="{ width: '100px' }"
+          mode="decimal"
+          [formControl]="formHelpers.get('exchangeRatePcv')"
+          [showButtons]="true"
+          [step]="0.1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div
+      class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+    >
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="exit()"
+        matTooltip="Anulowanie aktualizowania"
+        label="Anuluj"
+        matTooltipClass="tooltip-red"
+        icon="pi pi-times"
+        class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+      ></button>
+
+      <button
+        [disabled]="loadingSaveHelper"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateHelpersExchange()"
+        matTooltip="Aktualizuj"
+        label="Zapisz"
+        matTooltipClass="tooltip-green"
+        icon="pi pi-check"
+        class="p-button-raised p-button-success p-button-sm"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingSaveHelper"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Aktualizacja domyślnego kosztu kompletu/pakietu"
+  [(visible)]="displayFormSetCost"
+  class="no-padding-dialog"
+>
+  <form [formGroup]="formHelpers">
+    <div class="row w-100 m-0">
+      <div class="col p-4 d-flex justify-content-center">
+        <p-inputNumber
+          [inputStyle]="{ width: '100px' }"
+          mode="decimal"
+          [formControl]="formHelpers.get('defaultSetCost')"
+          [showButtons]="true"
+          [step]="0.1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div
+      class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+    >
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="exit()"
+        matTooltip="Anulowanie aktualizowania"
+        label="Anuluj"
+        matTooltipClass="tooltip-red"
+        icon="pi pi-times"
+        class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+      ></button>
+
+      <button
+        [disabled]="loadingSaveHelper"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateHelpersSetCost()"
+        matTooltip="Aktualizuj"
+        label="Zapisz"
+        matTooltipClass="tooltip-green"
+        icon="pi pi-check"
+        class="p-button-raised p-button-success p-button-sm"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingSaveHelper"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Aktualizacja domyślnego kosztu ustawienia"
+  [(visible)]="displayFormSetUpCost"
+  class="no-padding-dialog"
+>
+  <form [formGroup]="formHelpers">
+    <div class="row w-100 m-0">
+      <div class="col p-4 d-flex justify-content-center">
+        <p-inputNumber
+          [inputStyle]="{ width: '100px' }"
+          mode="decimal"
+          [formControl]="formHelpers.get('defaultClientSetUpCost')"
+          [showButtons]="true"
+          [step]="0.1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div
+      class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+    >
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="exit()"
+        matTooltip="Anulowanie aktualizowania"
+        label="Anuluj"
+        matTooltipClass="tooltip-red"
+        icon="pi pi-times"
+        class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+      ></button>
+
+      <button
+        [disabled]="loadingSaveHelper"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateHelpersSetUpCost()"
+        matTooltip="Aktualizuj"
+        label="Zapisz"
+        matTooltipClass="tooltip-green"
+        icon="pi pi-check"
+        class="p-button-raised p-button-success p-button-sm"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingSaveHelper"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Aktualizacja domyślnego kosztu zmiany koloru"
+  [(visible)]="displayFormChangeColor"
+  class="no-padding-dialog"
+>
+  <form [formGroup]="formHelpers">
+    <div class="row w-100 m-0">
+      <div class="col p-4 d-flex justify-content-center">
+        <p-inputNumber
+          [inputStyle]="{ width: '100px' }"
+          mode="decimal"
+          [formControl]="formHelpers.get('defaultCostChangeColor')"
+          [showButtons]="true"
+          [step]="0.1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div
+      class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+    >
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="exit()"
+        matTooltip="Anulowanie aktualizowania"
+        label="Anuluj"
+        matTooltipClass="tooltip-red"
+        icon="pi pi-times"
+        class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+      ></button>
+
+      <button
+        [disabled]="loadingSaveHelper"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateHelpersColorChange()"
+        matTooltip="Aktualizuj"
+        label="Zapisz"
+        matTooltipClass="tooltip-green"
+        icon="pi pi-check"
+        class="p-button-raised p-button-success p-button-sm"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingSaveHelper"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Aktualizacja domyślnego tekstu druku oferty"
+  [(visible)]="displayFormPrintText"
+  class="no-padding-dialog"
+>
+  <form [formGroup]="formHelpers">
+    <div class="row w-100 m-0">
+      <div class="col p-4">
+        <p>Nagłowek</p>
+        <p-editor
+          [formControl]="formHelpers.get('defaultPrintTextHeader')"
+          [style]="{ height: '320px' }"
+        >
+        </p-editor>
+      </div>
+
+      <div class="col p-4">
+        <p>Opis pod tabelą</p>
+        <p-editor
+          [formControl]="formHelpers.get('defaultPrintTextTableFotter')"
+          [style]="{ height: '320px' }"
+        >
+        </p-editor>
+      </div>
+    </div>
+
+    <div
+      class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+    >
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="exit()"
+        matTooltip="Anulowanie aktualizowania"
+        label="Anuluj"
+        matTooltipClass="tooltip-red"
+        icon="pi pi-times"
+        class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+      ></button>
+
+      <button
+        [disabled]="loadingSaveHelper"
+        pButton
+        pRipple
+        type="button"
+        (click)="updateHelpersPrintText()"
+        matTooltip="Aktualizuj"
+        label="Zapisz"
+        matTooltipClass="tooltip-green"
+        icon="pi pi-check"
+        class="p-button-raised p-button-success p-button-sm"
+      ></button>
+      <p-progressSpinner
+        *ngIf="loadingSaveHelper"
+        [style]="{ width: '25px', height: '25px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Aktualizacja domyślnych zakresów"
+  [(visible)]="displayCostsRange"
+>
+  <div style="padding: 1rem">
+    <form [formGroup]="formHelpers" class="sb-form">
+      <div class="row">
+        <div class="col helper-table">
+          <div class="text-center" style="background-color: aquamarine">
+            <span style="text-transform: uppercase; font-weight: bold"
+              >PCV</span
+            >
+          </div>
+
+          <table style="margin: 0 auto">
+            <thead>
+              <th class="text-left">Metry</th>
+              <th class="text-center">Łatwe</th>
+              <th class="text-center">Trudne</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0-50</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mEasyTo50')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mHardTo50')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>51-150</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mEasyTo150')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mHardTo150')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>151-500</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mEasyTo500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mHardTo500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>pow. 500</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mEasyAbove500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_pcv_mHardAbove500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col helper-table">
+          <div class="text-center mt-4" style="background-color: aquamarine">
+            <span style="text-transform: uppercase; font-weight: bold"
+              >ALU</span
+            >
+          </div>
+          <table style="margin: 0 auto">
+            <thead>
+              <th class="text-left">Metry</th>
+              <th class="text-center">Łatwe</th>
+              <th class="text-center">Trudne</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0-50</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mEasyTo50')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mHardTo50')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>51-150</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mEasyTo150')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mHardTo150')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>151-500</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mEasyTo500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mHardTo500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+              <tr>
+                <td>pow. 500</td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mEasyAbove500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-inputNumber
+                    mode="decimal"
+                    [formControl]="
+                      formHelpers.get('default_helper_alu_mHardAbove500')
+                    "
+                    [showButtons]="true"
+                    [step]="0.1"
+                  >
+                  </p-inputNumber>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    class="ui-dialog-buttonpane ui-helper-clearfix footer-btn sb-dialog-footer"
+  >
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit()"
+      matTooltip="Anulowanie aktualizowania"
+      label="Anuluj"
+      matTooltipClass="tooltip-red"
+      icon="pi pi-times"
+      class="p-button-raised p-button-outlined p-button-secondary p-button-sm"
+    ></button>
+
+    <button
+      [disabled]="loadingSaveHelper"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateCostsRange()"
+      matTooltip="Aktualizuj"
+      label="Zapisz"
+      matTooltipClass="tooltip-green"
+      icon="pi pi-check"
+      class="p-button-raised p-button-success p-button-sm"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loadingSaveHelper"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</p-dialog>

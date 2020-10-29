@@ -1,0 +1,378 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formUser" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label for="name" class="sb-small-label">Imię Nazwisko</label>
+        <input
+          pInputText
+          [formControl]="formUser.get('name')"
+          autofocus
+          type="text"
+          id="name"
+          class="fullwidth"
+          placeholder="Imię Nazwisko"
+          required
+          autocomplete="off"
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formUser.get('name').hasError('required') &&
+            formUser.get('name').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label for="username" class="sb-small-label">Login</label>
+        <input
+          pInputText
+          [formControl]="formUser.get('username')"
+          type="text"
+          id="username"
+          class="fullwidth"
+          placeholder="Login"
+          required
+          autocomplete="off"
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formUser.get('username').hasError('required') &&
+            formUser.get('username').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="!user" class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label for="password" class="sb-small-label">Hasło</label>
+        <input
+          pPassword
+          type="password"
+          [formControl]="formUser.get('password')"
+          id="password"
+          class="fullwidth"
+          placeholder="Hasło"
+          required
+          autocomplete="off"
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formUser.get('password').hasError('required') &&
+            formUser.get('password').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <mat-slide-toggle
+          [formControl]="formUser.get('active')"
+          [checked]="true"
+        >
+          Aktywny
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label for="roles" class="sb-small-label">Role</label>
+        <input
+          pInputText
+          [formControl]="formUser.get('role')"
+          type="text"
+          id="roles"
+          class="fullwidth"
+          required
+          autocomplete="off"
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formUser.get('role').hasError('required') &&
+            formUser.get('role').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col">
+        <p><b>Katalog</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('catalogRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          ></p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('catalogWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          ></p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('catalogDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          ></p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+
+      <div class="col">
+        <p><b>Systemy</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('systemRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('systemWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('systemDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+      <div class="col">
+        <p><b>Klient</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('clientRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('clientWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('clientDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+      <div class="col">
+        <p><b>Okleina</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('filmRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('filmWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('filmDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+      <div class="col">
+        <p><b>Producent</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('producerRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('producerWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('producerDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+      <div class="col">
+        <p><b>Oferty</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('offerRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('offerWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('offerDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+      <div class="col">
+        <p><b>Produkcja</b></p>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('productionRead')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Odczyt</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('productionWrite')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Zapis</p>
+        </div>
+        <div class="row m-0">
+          <p-toggleButton
+            [formControl]="formUser.get('productionDelete')"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+          >
+          </p-toggleButton>
+          <p class="ml-1">Usuwanie</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!user"
+      [disabled]="formUser.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addUser()"
+      pTooltip="Nowy użytkownik"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="user"
+      [disabled]="formUser.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateUser()"
+      pTooltip="Aktualizacja użytkownika"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

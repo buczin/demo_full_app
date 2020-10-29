@@ -1,0 +1,361 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formMyCompany" class="sb-form">
+    <div class="form-group m-0 p-0">
+      <div>
+        <p class="p-0 m-0"><b>DANE</b></p>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="name">Nazwa*</label>
+          <textarea
+            [style]="{ width: '100%' }"
+            pInputTextarea
+            type="text"
+            id="name"
+            [formControl]="formMyCompany.get('name')"
+            required
+          >
+          </textarea>
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('name').hasError('required') &&
+              formMyCompany.get('name').touched
+            "
+          >
+            musi być wypełnione
+          </p>
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="shortName">Krótka nazwa</label>
+          <input
+            pInputText
+            type="text"
+            id="shortName"
+            [formControl]="formMyCompany.get('shortName')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="shortId">Identyfikator</label>
+          <input
+            pInputText
+            type="text"
+            id="shortId"
+            [formControl]="formMyCompany.get('shortId')"
+            pKeyFilter="alpha"
+            maxlength="2"
+            minlength="2"
+            autocomplete="off"
+            required
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('shortId').hasError('required') &&
+              formMyCompany.get('shortId').touched
+            "
+          >
+            musi być wypełnione
+          </p>
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('shortId').hasError('minlength') &&
+              formMyCompany.get('shortId').touched
+            "
+          >
+            Identyfikator musi się składać z 2 znaków
+          </p>
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="nip">NIP*</label>
+          <input
+            [attr.disabled]="company ? true : null"
+            pInputText
+            type="text"
+            id="nip"
+            [formControl]="formMyCompany.get('nip')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('nip').hasError('nipFormat') &&
+              formMyCompany.get('nip').touched
+            "
+          >
+            niepoprawny nip
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="regon">REGON</label>
+          <input
+            pInputText
+            type="text"
+            id="regon"
+            [formControl]="formMyCompany.get('regon')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('regon').hasError('regonFormat') &&
+              formMyCompany.get('regon').touched
+            "
+          >
+            niepoprawny regon
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div>
+        <p class="mb-0 mt-4"><b>ADRES</b></p>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="town">Miasto</label>
+          <input
+            pInputText
+            type="text"
+            id="town"
+            [formControl]="formMyCompany.get('town')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="street">Ulica</label>
+          <input
+            pInputText
+            type="text"
+            id="street"
+            [formControl]="formMyCompany.get('street')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-2 mb-0 pb-0" style="padding: 0.5rem">
+          <label class="mb-0" for="houseNumber">Numer budynku</label>
+          <input
+            pInputText
+            type="text"
+            id="houseNumber"
+            [formControl]="formMyCompany.get('houseNumber')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-2 mb-0 pb-0" style="padding: 0.5rem">
+          <label class="mb-0" for="flatNumber">Numer mieszkania</label>
+          <input
+            pInputText
+            type="text"
+            id="flatNumber"
+            [formControl]="formMyCompany.get('flatNumber')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="postalCode">Kod Pocztowy</label>
+          <input
+            pInputText
+            type="text"
+            id="postalCode"
+            [formControl]="formMyCompany.get('postalCode')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="province">Województwo</label>
+          <input
+            pInputText
+            type="text"
+            id="province"
+            [formControl]="formMyCompany.get('province')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="country">Kraj</label>
+          <input
+            pInputText
+            type="text"
+            id="country"
+            [formControl]="formMyCompany.get('country')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div>
+        <p class="mb-0 mt-4"><b>DANE KONTAKTOWE</b></p>
+      </div>
+
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="email">EMAIL</label>
+          <input
+            pInputText
+            type="text"
+            id="email"
+            [formControl]="formMyCompany.get('email')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('email').hasError('email') &&
+              formMyCompany.get('email').touched
+            "
+          >
+            niepoprawny email
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="fvemail">EMAIL FV</label>
+          <input
+            pInputText
+            type="text"
+            id="fvemail"
+            [formControl]="formMyCompany.get('fvemail')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('email').hasError('fvemail') &&
+              formMyCompany.get('fvemail').touched
+            "
+          >
+            niepoprawny email
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="phonenumber">Numer telefonu</label>
+          <input
+            pInputText
+            type="text"
+            id="phonenumber"
+            [formControl]="formMyCompany.get('phonenumber')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('phonenumber').hasError('minLength') &&
+              formMyCompany.get('phonenumber').touched
+            "
+          >
+            niepoprawny numer telefonu
+          </p>
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="phonenumber2">Numer telefonu 2</label>
+          <input
+            pInputText
+            type="text"
+            id="phonenumber2"
+            [formControl]="formMyCompany.get('phonenumber2')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formMyCompany.get('phonenumber2').hasError('minLength') &&
+              formMyCompany.get('phonenumber2').touched
+            "
+          >
+            niepoprawny numer telefonu
+          </p>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 mb-0 pb-0">
+          <label class="mb-0" for="www">WWW</label>
+          <input
+            pInputText
+            type="text"
+            id="www"
+            [formControl]="formMyCompany.get('www')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 mb-0 pb-0">
+          <label class="mb-0" for="logoLink">Logo link</label>
+          <input
+            pInputText
+            type="text"
+            id="logoLink"
+            [formControl]="formMyCompany.get('logoLink')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!company"
+      [disabled]="formMyCompany.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="onAddMyCompany()"
+      pTooltip="Nowa firma"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="company"
+      [disabled]="formMyCompany.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="onUpdateMyCompany()"
+      pTooltip="Aktualizacja firmy"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

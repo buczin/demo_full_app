@@ -1,0 +1,129 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formOffer" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="myCompany">Oferta do firmy *</label>
+
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          placeholder="Wybierz firmę"
+          id="myCompany"
+          [options]="offerService.myCompanyData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formOffer.get('myCompany')"
+          required
+        ></p-dropdown>
+
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formOffer.get('myCompany').hasError('required') &&
+            formOffer.get('myCompany').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="client">Klient *</label>
+
+        <p-dropdown
+          placeholder="Wybierz klienta"
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          id="client"
+          [options]="offerService.clientData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formOffer.get('client')"
+          required
+        >
+        </p-dropdown>
+
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formOffer.get('client').hasError('required') &&
+            formOffer.get('client').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="offerDate">Data Oferty</label>
+
+        <p-calendar
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          [monthNavigator]="true"
+          [locale]="pl"
+          [formControl]="formOffer.get('offerDate')"
+          [showIcon]="true"
+          required
+        >
+        </p-calendar>
+      </div>
+
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="offerNumber">Numer oferty**</label>
+
+        <input
+          pInputText
+          id="offerNumber"
+          pKeyFilter="alpha"
+          [formControl]="formOffer.get('offerNumber')"
+          type="text"
+          pTooltip="Pole przeznaczone do wpisania numeru oferty jeżeli chcemy ustawić indywidualny. Pozostawienie pustego pola spowoduje automatyczne wygenerowanie numeru oferty."
+          class=""
+          placeholder="LMMrr-O-FM"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="formOffer.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addOffer()"
+      pTooltip="Dodaj ofertę"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

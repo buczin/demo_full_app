@@ -1,0 +1,350 @@
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-pause"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Folia</p>
+                <p class="card-title">{{ filmCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddFilm()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-tags"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Producenci</p>
+                <p class="card-title">{{ producerCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddProducer()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-tabView>
+  <p-tabPanel header="Okleiny">
+    <p-table
+      #okl
+      styleClass="p-datatable-striped"
+      selectionMode="single"
+      [value]="film"
+      [loading]="loading"
+      dataKey="id"
+      editMode="row"
+      sortMode="multiple"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} do {last} z {totalRecords}"
+      [filterDelay]="0"
+      [autoLayout]="true"
+      [globalFilterFields]="[
+        'number',
+        'name',
+        'producer.producerName',
+        'ralNumber',
+        'ecoPlastNumber'
+      ]"
+      [rowHover]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <span>Lista Oklein</span>
+          </div>
+          <div class="col" style="text-align: end">
+            <input
+              pInputText
+              type="text"
+              (input)="okl.filterGlobal($event.target.value, 'contains')"
+              placeholder="Wyszukiwarka"
+            />
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="small-row-table-head">
+          <th>Okleina</th>
+          <th pSortableColumn="number">
+            Numer<p-sortIcon field="number"></p-sortIcon>
+          </th>
+          <th pSortableColumn="name">
+            Name <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="producer">
+            Producent<p-sortIcon field="producer"></p-sortIcon>
+          </th>
+          <th pSortableColumn="maxWidth">
+            Maks szer. (mm)<p-sortIcon field="maxWidth"></p-sortIcon>
+          </th>
+          <th pSortableColumn="ralNumber">
+            Odp. RAL<p-sortIcon field="ralNumber"></p-sortIcon>
+          </th>
+          <th pSortableColumn="otherNumber">
+            Numer odp.<p-sortIcon field="otherNumber"> </p-sortIcon>
+          </th>
+          <th>Dopłata %</th>
+          <th pSortableColumn="status">
+            Status<p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th style="min-width: 90px; width: 90px"></th>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-editing="editing"
+        let-ri="rowIndex"
+      >
+        <tr
+          [pEditableRow]="rowData"
+          class="small-row-table-body"
+          [pSelectableRow]="rowData"
+        >
+          <td class="text-center">
+            <img
+              src="{{ rowData.imgLink }}"
+              width="40"
+              height="40"
+              (click)="showDialogFilm(rowData.imgLink)"
+            />
+          </td>
+          <td>
+            {{ rowData.number }}
+          </td>
+          <td>
+            {{ rowData.name }}
+          </td>
+          <td>
+            {{ rowData.producer.producerName }}
+          </td>
+          <td>
+            {{ rowData.maxWidth }}
+          </td>
+          <td>
+            {{ rowData.ralNumber }}
+          </td>
+          <td>
+            {{ rowData.otherNumber }}
+          </td>
+          <td>
+            {{ rowData.surchargePercentage }}
+          </td>
+          <td>
+            <div [ngSwitch]="rowData.status" class="text-center">
+              <div *ngSwitchCase="'DOSTEPNA'" class="status-film status-dost">
+                DOST.
+              </div>
+              <div
+                *ngSwitchCase="'NIEDOSTEPNA'"
+                class="status-film status-niedost"
+              >
+                NIEDOST.
+              </div>
+              <div
+                *ngSwitchCase="'DOSTEPNOSCOGRANICZONA'"
+                class="status-film status-ogr"
+              >
+                OGRAN.
+              </div>
+            </div>
+          </td>
+
+          <td class="edit-col">
+            <div class="d-flex justify-content-center">
+              <button
+                appPermission
+                permission="filmWrite"
+                pButton
+                type="button"
+                (click)="showDialogToUpdateFilm(rowData)"
+                pTooltip="Edycja Okleiny"
+                icon="pi pi-pencil"
+                class="p-button-sm sb-button blue"
+              ></button>
+
+              <button
+                appPermission
+                permission="filmDelete"
+                pButton
+                type="button"
+                (click)="onRowDeleteFilm(rowData)"
+                pTooltip="Usuwanie"
+                icon="pi pi-trash"
+                class="p-button-sm ml-1 sb-button red"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" style="text-align: left">Brak danych.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-tabPanel>
+
+  <p-tabPanel header="Producenci">
+    <ng-template pTemplate="content">
+      <p-table
+        #pr
+        styleClass="p-datatable-striped"
+        selectionMode="single"
+        [value]="filmService.producers"
+        dataKey="id"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} do {last} z {totalRecords}"
+        [filterDelay]="0"
+        [globalFilterFields]="['producerName']"
+      >
+        <ng-template pTemplate="caption">
+          <div class="row">
+            <div class="col">
+              <span>Producenci</span>
+            </div>
+            <div class="col" style="text-align: end">
+              <input
+                pInputText
+                type="text"
+                (input)="pr.filterGlobal($event.target.value, 'contains')"
+                placeholder="Wyszukiwarka"
+              />
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr class="small-row-table-head">
+            <th style="width: 40px">ID</th>
+            <th pSortableColumn="producerName">
+              Nazwa Producenta<p-sortIcon field="producerName"> </p-sortIcon>
+            </th>
+            <th style="min-width: 90px; width: 90px"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+          <tr class="small-row-table-body" [pSelectableRow]="rowData">
+            <td>
+              {{ rowData.id }}
+            </td>
+            <td>
+              {{ rowData.producerName }}
+            </td>
+            <td class="edit-col">
+              <button
+                appPermission
+                permission="producerWrite"
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToUpdateProducer(rowData)"
+                icon="pi pi-pencil"
+                class="p-button-sm sb-button blue"
+              ></button>
+
+              <button
+                appPermission
+                permission="producerDelete"
+                pButton
+                pRipple
+                type="button"
+                (click)="onRowDeleteProducer(rowData)"
+                icon="pi pi-trash"
+                class="p-button-sm ml-1 sb-button red"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" style="text-align: left">Brak danych.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+  </p-tabPanel>
+</p-tabView>
+
+<p-dialog
+  header="Okleina"
+  [(visible)]="displayDialogOkleina"
+  [minY]="70"
+  showEffect="fade"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  (onAfterHide)="onDialogHide()"
+  [contentStyle]="{ padding: '2em', textAlign: 'center' }"
+>
+  <div *ngIf="selectedOkleina">
+    <img width="400px" src="{{ selectedOkleina }}" />
+  </div>
+</p-dialog>

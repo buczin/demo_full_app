@@ -1,0 +1,73 @@
+<ul class="menu-items">
+  <li>
+    <a class="detailed" (click)="openLink()" [routerLink]="['/home']">
+      <span class="title">Dashboard</span>
+      <span class="details">---</span>
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-home"></i>
+    </div>
+  </li>
+  <li appPermission permission="productionRead">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/produkcja']">
+      <span class="title" style="color: mediumspringgreen"
+        ><b>Produkcja</b></span
+      >
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-inbox"></i>
+    </div>
+  </li>
+  <li appPermission permission="offerRead">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/marketing']">
+      <span class="title" style="color: darksalmon"><b>Marketing</b></span>
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-ticket"></i>
+    </div>
+  </li>
+  <li appPermission permission="catalogRead">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/katalog']">
+      <span class="title">Katalog</span>
+      <!-- <span class="details">---</span> -->
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-folder"></i>
+    </div>
+  </li>
+  <li appPermission permission="clientRead">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/kontrahent']">
+      <span class="title">Kontrahenci</span>
+      <!-- <span class="details">---</span> -->
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-id-card"></i>
+    </div>
+  </li>
+  <li appPermission permission="filmRead">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/okleiny']">
+      <span class="title">Okleiny</span>
+      <!-- <span class="details">---</span> -->
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-pause"></i>
+    </div>
+  </li>
+  <li *ngIf="auth.isAdmin">
+    <a class="detailed" (click)="openLink()" [routerLink]="['/settings']">
+      <span class="title">Ustawienia</span>
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-cog"></i>
+    </div>
+  </li>
+  <li>
+    <a class="detailed" (click)="openLink()" (click)="logout()">
+      <span class="title">Wyloguj</span>
+    </a>
+    <div class="icon-thumbnail">
+      <i class="pi pi-sign-out"></i>
+    </div>
+  </li>
+  <li></li>
+</ul>

@@ -1,0 +1,35 @@
+.page-content-wrapper {
+    min-height: 100%;
+    position: relative;
+}
+.content {
+    z-index: 10;
+    padding: 1rem;
+    min-height: 100%;
+    -webkit-transition: 0.3s;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .content {
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .content {
+        padding: 3rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .content {
+        padding: 3rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .content {
+        padding: 4rem;
+    }
+}

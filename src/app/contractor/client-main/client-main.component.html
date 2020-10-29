@@ -1,0 +1,198 @@
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-id-card"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Kontrahenci</p>
+                <p class="card-title">{{ clientCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddClient()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <p-table
+      #ct
+      styleClass="p-datatable-striped"
+      selectionMode="single"
+      [value]="client"
+      [loading]="loading"
+      dataKey="id"
+      editMode="row"
+      sortMode="multiple"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} do {last} z {totalRecords}"
+      [filterDelay]="0"
+      [autoLayout]="true"
+      selectionMode="single"
+      [(selection)]="selectedClient"
+      [globalFilterFields]="[
+        'name',
+        'nip',
+        'pesel',
+        'shortName',
+        'phonenumber'
+      ]"
+      [rowHover]="true"
+      columnResizeMode="expand"
+    >
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col"><span>Lista Kontrahentów</span></div>
+          <div class="col" style="text-align: end">
+            <input
+              pInputText
+              class="p-inputtext"
+              type="text"
+              (input)="ct.filterGlobal($event.target.value, 'contains')"
+              placeholder="Wyszukiwarka"
+            />
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="cl-header">
+          <th pTooltip="symfonia ID">
+            <div>symf. ID</div>
+          </th>
+          <th pSortableColumn="shortName">
+            <div>Skrót nazwa<p-sortIcon field="shortName"></p-sortIcon></div>
+          </th>
+          <th pSortableColumn="name">
+            <div>Nazwa <p-sortIcon field="name"></p-sortIcon></div>
+          </th>
+          <th pSortableColumn="town">
+            <div>Miasto <p-sortIcon field="town"></p-sortIcon></div>
+          </th>
+          <th>
+            <div>Ulica</div>
+          </th>
+          <th>
+            <div>Nr. budynku</div>
+          </th>
+          <th>
+            <div>Nr. mieszkania</div>
+          </th>
+          <th>
+            <div>Kod pocztowy</div>
+          </th>
+          <th>
+            <div>Województwo</div>
+          </th>
+          <th>
+            <div>Kraj</div>
+          </th>
+          <th>
+            <div>nr. tel.</div>
+          </th>
+          <th>
+            <div>nr. tel. 2</div>
+          </th>
+          <th>
+            <div>email</div>
+          </th>
+          <th>
+            <div>nip</div>
+          </th>
+          <th>
+            <div>pesel</div>
+          </th>
+          <th>
+            <div>regon</div>
+          </th>
+          <th>
+            <div>www</div>
+          </th>
+          <th style="min-width: 80px"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+        <tr class="cl-body" [pSelectableRow]="rowData">
+          <td>{{ rowData.symfoniaId }}</td>
+          <td>{{ rowData.shortName }}</td>
+          <td>{{ rowData.name }}</td>
+          <td>{{ rowData.town }}</td>
+          <td>{{ rowData.street }}</td>
+          <td>{{ rowData.houseNumber }}</td>
+          <td>{{ rowData.flatNumber }}</td>
+          <td>{{ rowData.postalCode }}</td>
+          <td>{{ rowData.province }}</td>
+          <td>{{ rowData.country }}</td>
+          <td style="min-width: 110px">{{ rowData.phonenumber }}</td>
+          <td style="min-width: 110px">{{ rowData.phonenumber2 }}</td>
+          <td>{{ rowData.email }}</td>
+          <td style="min-width: 110px">{{ rowData.nip }}</td>
+          <td>{{ rowData.pesel }}</td>
+          <td>{{ rowData.regon }}</td>
+          <td>{{ rowData.www }}</td>
+
+          <td class="edit-col">
+            <div class="d-flex justify-content-center">
+              <button
+                pButton
+                pRipple
+                appPermission
+                permission="catalogWrite"
+                type="button"
+                (click)="showDialogToUpdateClient(rowData)"
+                icon="pi pi-pencil"
+                class="p-button-sm sb-button blue"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                appPermission
+                permission="catalogDelete"
+                type="button"
+                (click)="onRowDeleteClient(rowData)"
+                icon="pi pi-trash"
+                class="p-button-sm ml-1 sb-button red"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="18" style="text-align: left">Brak danych.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

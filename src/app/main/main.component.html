@@ -1,0 +1,10 @@
+<app-sidebar
+  [class.isPrinting]="printService.isPrinting"
+  [hidden]="!auth.userValue"
+  class="sbs-sidebar"
+></app-sidebar>
+<app-page-container
+  [ngClass]="{ nopad: !auth.userValue }"
+  class="page-container"
+>
+</app-page-container>

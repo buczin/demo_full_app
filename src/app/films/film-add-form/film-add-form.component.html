@@ -1,0 +1,222 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formFilm" class="sb-form">
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="producer">Producent *</label>
+        <p-dropdown
+          id="producer"
+          [style]="{ width: '100%' }"
+          [options]="filmService.producersSelect"
+          [filter]="true"
+          filterBy="producerName,value.producerName"
+          [formControl]="formFilm.get('producer')"
+          placeholder="wybierz producenta"
+          required
+        ></p-dropdown>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formFilm.get('producer').hasError('required') &&
+            formFilm.get('producer').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="number">Numer *</label>
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formFilm.get('number')"
+          autofocus
+          type="text"
+          id="number"
+          required
+          autocomplete="off"
+          autofocus
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formFilm.get('number').hasError('required') &&
+            formFilm.get('number').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formFilm.get('number').hasError('filmExists') &&
+            formFilm.get('number').touched
+          "
+        >
+          ten numer znajduje się na liście
+        </p>
+      </div>
+
+      <div class="col">
+        <label class="sb-small-label" for="name">Nazwa *</label>
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formFilm.get('name')"
+          type="text"
+          id="name"
+          required
+          autocomplete="off"
+        />
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formFilm.get('name').hasError('required') &&
+            formFilm.get('name').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="ralNumber">Odp. RAL</label>
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formFilm.get('ralNumber')"
+          type="text"
+          id="ralNumber"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="col">
+        <label class="sb-small-label" for="otherNumber">Nr. odpowiednik</label>
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formFilm.get('otherNumber')"
+          type="text"
+          id="otherNumber"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="surchargePercentage"
+          >Dopłata %</label
+        >
+        <p-inputNumber
+          class="fullwidth"
+          [formControl]="formFilm.get('surchargePercentage')"
+          suffix="%"
+          :min="0"
+          showButtons="true"
+          id="surchargePercentage"
+          placeholder="%"
+          autocomplete="off"
+        ></p-inputNumber>
+      </div>
+      <div class="col">
+        <label class="sb-small-label" for="maxWidth">Maks szer. (mm)</label>
+        <p-inputNumber
+          class="fullwidth"
+          [formControl]="formFilm.get('maxWidth')"
+          suffix=" mm"
+          :min="0"
+          showButtons="true"
+          id="maxWidth"
+          autocomplete="off"
+        ></p-inputNumber>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="status">Status *</label>
+        <p-dropdown
+          inputId="status"
+          [style]="{ width: '100%' }"
+          [options]="available"
+          [formControl]="formFilm.get('status')"
+          placeholder="Wybierz"
+          optionLabel="label"
+          required
+        >
+        </p-dropdown>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="imgLink">Obraz</label>
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formFilm.get('imgLink')"
+          type="text"
+          id="imgLink"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!filmData"
+      [disabled]="formFilm.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addNewFilm()"
+      pTooltip="Dodaj nową okleinę"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="filmData"
+      [disabled]="formFilm.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateFilm()"
+      pTooltip="Aktualizacja okleiny"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

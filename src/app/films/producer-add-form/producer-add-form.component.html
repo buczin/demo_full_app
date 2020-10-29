@@ -1,0 +1,91 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formProducer" class="sb-form">
+    <div class="row">
+      <div class="col">
+        <label class="sb-small-label" for="producerNameid"
+          >Nazwa Producenta</label
+        >
+        <input
+          pInputText
+          class="fullwidth"
+          [formControl]="formProducer.get('producerName')"
+          type="text"
+          id="producerNameid"
+          required
+          autofocus
+          autocomplete="off"
+        />
+
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProducer.get('producerName').hasError('required') &&
+            formProducer.get('producerName').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProducer.get('producerName').hasError('producerExists') &&
+            formProducer.get('producerName').touched
+          "
+        >
+          nazwa producenta została już dodana
+        </p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!producerData"
+      [disabled]="formProducer.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addNewProducer()"
+      pTooltip="Dodaj nowego producenta"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="producerData"
+      [disabled]="formProducer.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateProducer()"
+      pTooltip="Aktualizacja producenta"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

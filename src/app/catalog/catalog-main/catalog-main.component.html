@@ -1,0 +1,618 @@
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-folder"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Pozycje</p>
+                <p class="card-title">{{ catalogCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddCatalog()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-tags"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Systemy</p>
+                <p class="card-title">{{ systemCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddSystem()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-tabView>
+  <p-tabPanel header="Katalog Profili">
+    <p-table
+      #kp
+      styleClass="p-datatable-striped"
+      selectionMode="single"
+      [value]="catalog"
+      dataKey="id"
+      editMode="row"
+      [loading]="loadingCatalog"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [showCurrentPageReport]="true"
+      [autoLayout]="true"
+      currentPageReportTemplate="{first} do {last} z {totalRecords}"
+      [filterDelay]="0"
+      [globalFilterFields]="[
+        'number',
+        'profileType',
+        'systemProfil.name',
+        'offerName'
+      ]"
+      [rowHover]="true"
+      sortField="systemProfil.name"
+      sortOrder="1"
+    >
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <span>Katalog Profili</span>
+          </div>
+          <div class="col" style="text-align: end">
+            <p-dropdown
+              #ss
+              (onChange)="loadSelectedSystem(ss.selectedOption.value)"
+              [options]="catalogService.systemsSelectTable"
+              [filter]="true"
+              filterBy="name,value.name"
+              placeholder="Wybierz system"
+            >
+            </p-dropdown>
+            <input
+              type="text"
+              class="p-inputtext-lg"
+              (input)="kp.filterGlobal($event.target.value, 'contains')"
+              class="ml-2 p-inputtext"
+              placeholder="Wyszukiwarka"
+              pInputText
+            />
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="small-row-table-head">
+          <th style="width: 180px" pSortableColumn="number">
+            <div>Numer<p-sortIcon field="number"></p-sortIcon></div>
+          </th>
+          <th style="width: 180px" pSortableColumn="profileType">
+            <div>
+              Rodzaj Kształtownika<p-sortIcon field="profileType"></p-sortIcon>
+            </div>
+          </th>
+          <th style="width: 180px" pSortableColumn="offerName">
+            <div>Na Ofercie<p-sortIcon field="offerName"></p-sortIcon></div>
+          </th>
+          <th style="width: 180px" pSortableColumn="systemProfil.name">
+            <div>System<p-sortIcon field="systemProfil.name"></p-sortIcon></div>
+          </th>
+          <th style="width: 60px" pTooltip="Zewnętrzny">
+            <div>Zew.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Wewnętrzny">
+            <div>Wew.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Jednostronny">
+            <div>Jedno.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Środek">
+            <div>Środek</div>
+          </th>
+          <th style="width: 60px" pTooltip="Obustronny">
+            <div>Obu.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Obu. Zewnętrzny">
+            <div>Obu. Zew.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Obu. Wewnętrzny">
+            <div>Obu. Wew.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Pomiar rzeczywisty (zweryfikowany)">
+            <div>Rzeczy.</div>
+          </th>
+          <th style="width: 60px" pTooltip="Trudne">
+            <div>Trudne</div>
+          </th>
+          <th style="width: 60px" pTooltip="Aluminium">
+            <div>Alu</div>
+          </th>
+          <th style="width: 60px">
+            <div>Uwagi</div>
+          </th>
+          <th style="min-width: 80px; width: 80px"></th>
+        </tr>
+        <tr>
+          <th>
+            <input
+              pInputText
+              type="text"
+              (input)="kp.filter($event.target.value, 'number', 'startsWith')"
+              placeholder="Szukaj po numerze"
+              class="p-inputtext-sm w-100"
+            />
+          </th>
+          <th>
+            <input
+              pInputText
+              type="text"
+              (input)="
+                kp.filter($event.target.value, 'profileType', 'startsWith')
+              "
+              placeholder="Szukaj po rodzaju"
+              class="p-inputtext-sm w-100"
+            />
+          </th>
+          <th>
+            <input
+              pInputText
+              type="text"
+              (input)="
+                kp.filter($event.target.value, 'offerName', 'startsWith')
+              "
+              placeholder="Szukaj po nazwie"
+              class="p-inputtext-sm w-100"
+            />
+          </th>
+          <th>
+            <input
+              pInputText
+              type="text"
+              (input)="
+                kp.filter(
+                  $event.target.value,
+                  'systemProfil.name',
+                  'startsWith'
+                )
+              "
+              placeholder="Szukaj po systemie"
+              class="p-inputtext-sm w-100"
+            />
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-editing="editing"
+        let-expanded="expanded"
+        let-ri="rowIndex"
+      >
+        <tr
+          [pEditableRow]="rowData"
+          class="small-row-table-body"
+          [pSelectableRow]="rowData"
+        >
+          <td>
+            {{ rowData.number }}
+          </td>
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input"
+                >=
+
+                <textarea
+                  [style]="{ width: '100%' }"
+                  pInputTextarea
+                  [(ngModel)]="rowData.profileType"
+                  placeholder="Uwagi"
+                  required
+                ></textarea>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.profileType }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <textarea
+                  [style]="{ width: '100%' }"
+                  pInputTextarea
+                  [(ngModel)]="rowData.offerName"
+                  placeholder="Uwagi"
+                  required
+                ></textarea>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.offerName }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td>
+            {{ rowData.systemProfil.name }}
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimOuter"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimOuter }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimInner"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimInner }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimOneSide"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimOneSide }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimCenterSide"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimCenterSide }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimTwoSide"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimTwoSide }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimTwoSideOuter"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimTwoSideOuter }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  class="inline-edit"
+                  pInputText
+                  type="number"
+                  [(ngModel)]="rowData.dimTwoSideInner"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.dimTwoSideInner }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <p-checkbox
+                  [(ngModel)]="rowData.actualMeasurement"
+                  [binary]="true"
+                >
+                </p-checkbox>
+              </ng-template>
+              <ng-template pTemplate="output">
+                <span
+                  [class]="'measure-badge status-' + rowData.actualMeasurement"
+                >
+                  {{ showBoolean(rowData.actualMeasurement) }}
+                </span>
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <p-checkbox
+                  [(ngModel)]="rowData.hard"
+                  [binary]="true"
+                ></p-checkbox>
+              </ng-template>
+              <ng-template pTemplate="output">
+                <span [class]="'hard-badge status-' + rowData.hard">
+                  {{ showBoolean(rowData.hard) }}
+                </span>
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+          <td class="text-center">
+            <span [class]="'measure-badge status-' + rowData.alu">
+              {{ showBoolean(rowData.alu) }}
+            </span>
+          </td>
+
+          <td>
+            <a *ngIf="rowData.comments" href="#" [pRowToggler]="rowData">
+              <i
+                [ngClass]="
+                  expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+                "
+              ></i>
+            </a>
+          </td>
+
+          <td class="edit-col">
+            <div class="d-flex justify-content-center">
+              <button
+                pButton
+                pRipple
+                appPermission
+                permission="catalogWrite"
+                type="button"
+                (click)="showDialogToUpdateCatalog(rowData)"
+                icon="pi pi-pencil"
+                class="p-button-sm sb-button blue"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                appPermission
+                permission="catalogDelete"
+                type="button"
+                (click)="onRowDeleteCatalog(rowData)"
+                icon="pi pi-trash"
+                class="p-button-sm ml-1 sb-button red"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-rowData>
+        <tr>
+          <td [attr.colspan]="16">
+            <div
+              class="p-grid ui-fluid"
+              style="font-size: 16px; padding: 20px"
+              [@rowExpansionTrigger]="'active'"
+            >
+              <div class="p-col-12 p-md-9" [innerHTML]="rowData.comments"></div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="14" style="text-align: left">Brak danych.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-tabPanel>
+  <p-tabPanel header="Systemy">
+    <ng-template pTemplate="content">
+      <p-table
+        #sy
+        styleClass="p-datatable-striped"
+        selectionMode="single"
+        [value]="catalogService.systems"
+        dataKey="id"
+        editMode="row"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [autoLayout]="true"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} do {last} z {totalRecords}"
+        [filterDelay]="0"
+        [globalFilterFields]="['name']"
+      >
+        <ng-template pTemplate="caption">
+          <div class="row">
+            <div class="col">
+              <span>Systemy</span>
+            </div>
+            <div class="col" style="text-align: end">
+              <input
+                pInputText
+                type="text"
+                (input)="sy.filterGlobal($event.target.value, 'contains')"
+                placeholder="Wyszukiwarka"
+              />
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr class="small-row-table-head">
+            <th style="width: 40px">
+              <div>ID</div>
+            </th>
+            <th pSortableColumn="name">
+              <div>Nazwa<p-sortIcon field="name"></p-sortIcon></div>
+            </th>
+            <th pSortableColumn="comment">
+              <div>Opis<p-sortIcon field="comment"></p-sortIcon></div>
+            </th>
+            <th style="min-width: 80px; width: 80px"></th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-editing="editing"
+          let-ri="rowIndex"
+        >
+          <tr
+            [pEditableRow]="rowData"
+            class="small-row-table-body"
+            [pSelectableRow]="rowData"
+          >
+            <td>
+              {{ rowData.id }}
+            </td>
+            <td>
+              {{ rowData.name }}
+            </td>
+            <td>
+              <div [innerHTML]="rowData.comment"></div>
+            </td>
+
+            <td class="edit-col">
+              <div class="d-flex justify-content-center">
+                <button
+                  pButton
+                  pRipple
+                  appPermission
+                  permission="systemWrite"
+                  type="button"
+                  (click)="showDialogToUpdateSystem(rowData)"
+                  icon="pi pi-pencil"
+                  class="p-button-sm sb-button blue"
+                ></button>
+
+                <button
+                  pButton
+                  pRipple
+                  appPermission
+                  permission="systemDelete"
+                  type="button"
+                  (click)="onRowDeleteSystem(rowData)"
+                  icon="pi pi-trash"
+                  class="p-button-sm ml-1 sb-button red"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" style="text-align: left">Brak danych.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+  </p-tabPanel>
+</p-tabView>

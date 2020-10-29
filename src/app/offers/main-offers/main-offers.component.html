@@ -1,0 +1,692 @@
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-ticket"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Oferty</p>
+                <p class="card-title">{{ offersCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddOffer()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-tabView>
+  <p-tabPanel header="Nowe">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #ofn
+          [value]="offersNew"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          [loading]="loadingTable"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"></p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"></p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"></p-sortIcon>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="oferta/{{ rowData.offerNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.offerNumber }}</a
+                >
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="W przygotowaniu">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #ofn
+          styleClass="p-datatable-striped"
+          [value]="offersInpreparation"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          [loading]="loadingTable"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="oferta/{{ rowData.offerNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.offerNumber }}</a
+                >
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Wysłane">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #ofn
+          styleClass="p-datatable-striped"
+          [value]="offersSent"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          [loading]="loadingTable"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="oferta/{{ rowData.offerNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.offerNumber }}</a
+                >
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Zaakceptowane">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #ofn
+          styleClass="p-datatable-striped"
+          [value]="offersAccepted"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          [loading]="loadingTable"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="oferta/{{ rowData.offerNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.offerNumber }}</a
+                >
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Anulowane">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #ofn
+          styleClass="p-datatable-striped"
+          [value]="offersCanceled"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          [loading]="loadingTable"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="oferta/{{ rowData.offerNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.offerNumber }}</a
+                >
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Wszystkie">
+    <div class="row">
+      <div class="col-12">
+        <p-table
+          #of
+          styleClass="p-datatable-striped"
+          [value]="allOffers"
+          dataKey="id"
+          [paginator]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [rows]="10"
+          [resizableColumns]="true"
+          sortField="offerNumber"
+          sortOrder="-1"
+          [showCurrentPageReport]="true"
+          [autoLayout]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Oferty</span>
+              </div>
+              <div class="col" style="text-align: end">
+                <p-dropdown
+                  #of
+                  placeholder="Wybierz Status"
+                  (onChange)="loadByStatus(of.selectedOption.value)"
+                  [options]="optionsSort"
+                  [filter]="true"
+                  filterBy="name,value"
+                  class=""
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="offerNumber">
+                Numer Oferty<p-sortIcon field="offerNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="offerDate">
+                Data Oferty<p-sortIcon field="offerDate"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="offerStatus">
+                Status<p-sortIcon field="offerStatus"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'offerNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze oferty"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    of.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a routerLink="oferta/{{ rowData.offerNumber }}">{{
+                  rowData.offerNumber
+                }}</a>
+              </td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.offerDate }}</td>
+              <td>{{ statusOfferSwitch(rowData.offerStatus) }}</td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>

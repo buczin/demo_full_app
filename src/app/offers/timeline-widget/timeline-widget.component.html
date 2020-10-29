@@ -1,0 +1,73 @@
+<div class="sb-timeline-widget">
+  <ul class="sb-timeline">
+    <li *ngFor="let item of offerNotes">
+      <div class="date">
+        <span>{{ item.createdDate | date: "dd.MM.yyyy, HH:mm" }}</span>
+        <i class="pi pi-comment" style="font-size: 2rem"></i>
+      </div>
+      <div class="message">
+        <div class="checked" [innerHTML]="item.message"></div>
+        <button
+          pButton
+          pRipple
+          type="button"
+          (click)="deleteNote(offerNumber, item.id)"
+          pTooltip="Usuń notatke"
+          icon="pi pi-trash"
+          class="p-button-sm sb-button red"
+        ></button>
+      </div>
+      <div class="break"></div>
+      <div class="author">{{ item.createdBy }}</div>
+    </li>
+    <li>
+      <div class="date">
+        <span>{{ now | date: "dd.MM.yyyy, HH:mm" }}</span>
+        <i class="pi pi-comment" style="font-size: 2rem"></i>
+      </div>
+      <div class="message">
+        <p-editor [(ngModel)]="newNote" [style]="{ height: '150px' }">
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+
+        <button
+          pButton
+          pRipple
+          type="button"
+          (click)="addNewNote(offerNumber, newNote)"
+          pTooltip="Nowa notatka"
+          icon="pi pi-plus"
+          class="p-button-sm sb-button blue"
+        ></button>
+      </div>
+      <div class="break"></div>
+      <div class="author"></div>
+    </li>
+  </ul>
+</div>

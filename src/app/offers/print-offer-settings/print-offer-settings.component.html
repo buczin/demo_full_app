@@ -1,0 +1,298 @@
+<div class="print-offer-settings">
+  <div class="set-header row">
+    <div class="header-name">
+      <h5>Nagłówek</h5>
+    </div>
+    <div class="break"></div>
+    <div class="area">
+      <div class="text" *ngIf="!editHeader" [innerHTML]="printTextHeader"></div>
+      <div class="btn-edit" *ngIf="!editHeader">
+        <button
+          pButton
+          pRipple
+          type="button"
+          (click)="editHeader = !editHeader"
+          icon="pi pi-pencil"
+          class="p-button-sm sb-button gray m-1"
+          style="height: 28px"
+        ></button>
+      </div>
+      <div class="col-g-12 col-md-12 col-lg-12" *ngIf="editHeader">
+        <p-editor [(ngModel)]="printTextHeader" [style]="{ height: '320px' }">
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+        <div class="sb-dialog-footer">
+          <div class="sb-btn-close">
+            <button
+              pButton
+              pRipple
+              type="button"
+              (click)="editHeader = !editHeader"
+              pTooltip="Anulowanie dodawania"
+              label="Anuluj"
+              icon="pi pi-times"
+              class="p-button-sm sb-button o-gray"
+            ></button>
+          </div>
+          <div class="sb-btn-save">
+            <button
+              [disabled]="loading"
+              pButton
+              pRipple
+              type="button"
+              (click)="updatePrintHeader()"
+              pTooltip="Zapisz nagłownek"
+              label="Zapisz"
+              icon="pi pi-check"
+              class="p-button-sm sb-button green"
+            ></button>
+            <p-progressSpinner
+              *ngIf="loading"
+              [style]="{ width: '25px', height: '25px' }"
+              styleClass="custom-spinner"
+              strokeWidth="8"
+              fill="#EEEEEE"
+              animationDuration=".5s"
+            >
+            </p-progressSpinner>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="set-tableFooter row">
+    <div class="header-name">
+      <h5>Opis tabeli</h5>
+    </div>
+    <div class="break"></div>
+    <div class="area">
+      <div
+        class="text"
+        *ngIf="!editTableFooter"
+        [innerHTML]="printTextTableFotter"
+      ></div>
+      <div class="btn-edit" *ngIf="!editTableFooter">
+        <button
+          pButton
+          pRipple
+          type="button"
+          (click)="editTableFooter = !editTableFooter"
+          icon="pi pi-pencil"
+          class="p-button-sm sb-button gray m-1"
+          style="height: 28px"
+        ></button>
+      </div>
+      <div class="col-g-12 col-md-12 col-lg-12" *ngIf="editTableFooter">
+        <p-editor
+          [(ngModel)]="printTextTableFotter"
+          [style]="{ height: '320px' }"
+        >
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+        <div class="sb-dialog-footer">
+          <div class="sb-btn-close">
+            <button
+              pButton
+              pRipple
+              type="button"
+              (click)="editTableFooter = !editTableFooter"
+              pTooltip="Anulowanie dodawania"
+              label="Anuluj"
+              icon="pi pi-times"
+              class="p-button-sm sb-button o-gray"
+            ></button>
+          </div>
+          <div class="sb-btn-save">
+            <button
+              [disabled]="loading"
+              pButton
+              pRipple
+              type="button"
+              (click)="updatePrintTableFooter()"
+              pTooltip="Zapisz opis"
+              label="Zapisz"
+              icon="pi pi-check"
+              class="p-button-sm sb-button green"
+            ></button>
+            <p-progressSpinner
+              *ngIf="loading"
+              [style]="{ width: '25px', height: '25px' }"
+              styleClass="custom-spinner"
+              strokeWidth="8"
+              fill="#EEEEEE"
+              animationDuration=".5s"
+            >
+            </p-progressSpinner>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="set-comments row">
+    <div class="header-name">
+      <h5>Uwagi</h5>
+    </div>
+    <div class="break"></div>
+    <div class="area-comment">
+      <ul cdkDropList class="comment-list" (cdkDropListDropped)="drop($event)">
+        <li *ngFor="let item of allComments" class="list-box" cdkDrag>
+          <div class="check">
+            <p-checkbox
+              name="groupname"
+              (onChange)="updateCommentInOffer()"
+              value="item"
+              [(ngModel)]="selectedComments"
+              [value]="item.id"
+            ></p-checkbox>
+          </div>
+          <div class="number">
+            {{ item.number }}
+          </div>
+          <div class="text" [innerHTML]="item.comment"></div>
+          <div class="btn-edit">
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-pencil"
+              (click)="editComment(item)"
+              class="p-button-sm sb-button gray m-1"
+              style="height: 28px"
+            ></button>
+            <button
+              pButton
+              pRipple
+              (click)="deleteComment(item.id)"
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-sm sb-button red m-1"
+              style="height: 28px"
+            ></button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="new-comment">
+        <!-- <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="newCommentForm"></textarea> -->
+
+        <p-editor [(ngModel)]="newCommentForm" [style]="{ height: '150px' }">
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+        <div class="buttons-save">
+          <button
+            *ngIf="!commentId"
+            pButton
+            pRipple
+            type="button"
+            (click)="newComment()"
+            pTooltip="Dodaj nową uwagę"
+            icon="pi pi-plus"
+            class="p-button-sm sb-button blue"
+          ></button>
+
+          <button
+            *ngIf="commentId"
+            pButton
+            pRipple
+            type="button"
+            (click)="updateComment()"
+            pTooltip="Aktualizacja uwagi"
+            icon="pi pi-check"
+            class="p-button-sm sb-button blue"
+          ></button>
+
+          <button
+            *ngIf="commentId"
+            pButton
+            pRipple
+            type="button"
+            (click)="exitUpdateComment()"
+            pTooltip="Anuluj"
+            icon="pi pi-times"
+            class="p-button-sm sb-button o-gray"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

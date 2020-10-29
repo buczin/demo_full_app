@@ -1,0 +1,48 @@
+<div class="sidebar-header">
+  <img
+    alt="logo"
+    class="brand-logo-menu"
+    height="22"
+    width="78"
+    src="assets/img/logo.png"
+  />
+  <div class="brand-logo-menu-icon">
+    <mat-icon>forward</mat-icon>
+    <a
+      #menu_icon
+      (click)="openMenu()"
+      class="nav_toggle"
+      role="button"
+      aria-expanded="false"
+      aria-controls="menu"
+    >
+      <svg
+        class="menuicon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 50 50"
+      >
+        <g>
+          <line class="menuicon__bar" x1="13" y1="16.5" x2="37" y2="16.5" />
+          <line class="menuicon__bar" x1="13" y1="24.5" x2="37" y2="24.5" />
+          <line class="menuicon__bar" x1="13" y1="24.5" x2="37" y2="24.5" />
+          <line class="menuicon__bar" x1="13" y1="32.5" x2="37" y2="32.5" />
+          <circle class="menuicon__circle" r="23" cx="25" cy="25" />
+        </g>
+      </svg>
+    </a>
+  </div>
+</div>
+<div #menu_content class="sidebar-content">
+  <div class="sidebar-user">
+    <span>{{ username }}</span>
+  </div>
+  <div class="sidebar-menu">
+    <app-menu-items (open)="closeMenu()"></app-menu-items>
+  </div>
+  <div class="sidebar-version">
+    <span>v. {{ version }}</span>
+  </div>
+  <div class="splash"></div>
+</div>

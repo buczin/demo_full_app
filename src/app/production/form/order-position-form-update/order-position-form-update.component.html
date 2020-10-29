@@ -1,0 +1,652 @@
+<div class="sb-dialog-content" style="width: 1000px; min-width: 1000px">
+  <form [formGroup]="formOrderPosition" class="sb-form">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="systemId">Wybór systemu</label>
+            <p-dropdown
+              [options]="productionService.allSystems"
+              (onChange)="filterBySystem()"
+              styleClass="fullwidth"
+              appendTo="body"
+              [(ngModel)]="selectedSystem"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="Wybierz system"
+              optionLabel="name"
+              [showClear]="true"
+              filter="true"
+            >
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <p-radioButton
+              class="p-2"
+              name="groupSearch"
+              value="number"
+              label="Numer"
+              [(ngModel)]="searchBy"
+              [ngModelOptions]="{ standalone: true }"
+            ></p-radioButton>
+            <p-radioButton
+              class="p-2"
+              name="groupSearch"
+              value="name"
+              label="Nazwa"
+              [(ngModel)]="searchBy"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </p-radioButton>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="profilNumberId"
+              >Numer kształtownika *</label
+            >
+            <p-autoComplete
+              [inputStyle]="{ 'font-weight': 'bold' }"
+              autocomplete="off"
+              appendTo="body"
+              styleClass="fullwidth"
+              [formControl]="formOrderPosition.get('profilNumber')"
+              [suggestions]="catalogSugFiltered"
+              (completeMethod)="searchCatalog($event)"
+              [dropdown]="true"
+              emptyMessage="Nie znaleziono"
+              (onSelect)="onSelectCatalog($event)"
+            >
+              <ng-template let-catalog pTemplate="item">
+                <div
+                  [class]="
+                    'measure-badge status-' +
+                    catalog.actualMeasurement +
+                    ' catalog-dropdown'
+                  "
+                >
+                  <div class="row">
+                    <div class="col">
+                      <div style="font-size: 16px">
+                        <i
+                          style="color: red; font-size: 1em; padding-right: 2px"
+                          *ngIf="catalog.hard"
+                          class="pi pi-exclamation-triangle"
+                        ></i>
+                        {{ catalog.number }}
+                      </div>
+                      <div style="font-size: 12px">
+                        {{ catalog.profileType }}
+                      </div>
+                      <div style="font-size: 12px">
+                        {{ catalog.systemProfil.name }}
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div style="font-size: 12px">
+                        ZEW: <b>{{ catalog.dimOuter }}</b>
+                      </div>
+                      <div style="font-size: 12px">
+                        WEW: <b>{{ catalog.dimInner }}</b>
+                      </div>
+                      <div style="font-size: 12px">
+                        JEDN: <b>{{ catalog.dimOneSide }}</b>
+                      </div>
+                      <div style="font-size: 12px">
+                        ŚRO: <b>{{ catalog.dimCenterSide }}</b>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div style="font-size: 12px">
+                        OBU: <b>{{ catalog.dimTwoSide }}</b>
+                      </div>
+                      <div style="font-size: 12px">
+                        OBU ZEW:
+                        <b>{{ catalog.dimTwoSideOuter }}</b>
+                      </div>
+                      <div style="font-size: 12px">
+                        OBU WEW:
+                        <b>{{ catalog.dimTwoSideInner }}</b>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-autoComplete>
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formOrderPosition.get('profilNumber').hasError('required') &&
+                formOrderPosition.get('profilNumber').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label class="sb-small-label" for="profilTypeId"
+              >Rodzaj kształtownika *</label
+            >
+            <input
+              pInputText
+              type="text"
+              autocomplete="off"
+              class="fullwidth"
+              [formControl]="formOrderPosition.get('profilType')"
+            />
+            <p
+              class="invalid-feedback"
+              *ngIf="
+                formOrderPosition.get('profilType').hasError('required') &&
+                formOrderPosition.get('profilType').touched
+              "
+            >
+              musi być wypełnione
+            </p>
+          </div>
+        </div>
+        <div class="row pt-1">
+          <div class="col-sm-12 col-md-12 col-lg-12 d-flex align-items-center">
+            <p-checkbox
+              [formControl]="formOrderPosition.get('alu')"
+              [binary]="true"
+              label="Alu"
+            >
+            </p-checkbox>
+          </div>
+        </div>
+        <div class="row pt-1">
+          <div class="col-sm-12 col-md-12 col-lg-12 d-flex align-items-center">
+            <p-checkbox
+              [formControl]="formOrderPosition.get('warranty')"
+              [binary]="true"
+              label="Gwarancja"
+            >
+            </p-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row w-100 m-0">
+          <div
+            *ngIf="selectedCatalog != null"
+            class="col-sm-12 col-md-12 col-lg-12 sb-stats-form mt-2"
+          >
+            <div class="row p-1">
+              <div class="sb-stars-header">Wybrana pozycja</div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="stats-table">
+                  <table>
+                    <thead class="sb-header-normal">
+                      <tr>
+                        <th class="text-left">Numer</th>
+                        <th></th>
+                        <th class="text-left">Nazwa</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center">
+                          <b>{{ selectedCatalog.number }}</b>
+                        </td>
+                        <td></td>
+                        <td class="text-center">
+                          <b>{{ selectedCatalog.profileType }}</b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="stats-table">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td
+                          *ngIf="selectedCatalog.hard"
+                          style="color: red; border: 0"
+                          class="text-center"
+                        >
+                          <i
+                            style="padding-right: 5px"
+                            class="pi pi-exclamation-triangle"
+                          ></i>
+                          <span>TRUDNE</span>
+                        </td>
+                        <td
+                          *ngIf="selectedCatalog.actualMeasurement"
+                          style="color: green; border: 0"
+                          class="text-center"
+                        >
+                          <i
+                            style="padding-right: 5px"
+                            class="pi pi-check-circle"
+                          ></i>
+                          <span>Wymiar zmierzony fizycznie</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-1">
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="stats-table">
+                  <table>
+                    <thead class="sb-header-normal">
+                      <th class="text-center">ZEW</th>
+                      <th class="text-center">WEW</th>
+                      <th class="text-center">JEDN</th>
+                      <th class="text-center">ŚROD</th>
+                      <th class="text-center">OBU</th>
+                      <th class="text-center">OBU ZEW</th>
+                      <th class="text-center">OBU WEW</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimOuter
+                              ? selectedCatalog.dimOuter
+                              : "--"
+                          }}</b>
+                        </td>
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimInner
+                              ? selectedCatalog.dimInner
+                              : "--"
+                          }}</b>
+                        </td>
+
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimOneSide
+                              ? selectedCatalog.dimOneSide
+                              : "--"
+                          }}</b>
+                        </td>
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimCenterSide
+                              ? selectedCatalog.dimCenterSide
+                              : "--"
+                          }}</b>
+                        </td>
+
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimTwoSide
+                              ? selectedCatalog.dimTwoSide
+                              : "--"
+                          }}</b>
+                        </td>
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimTwoSideOuter
+                              ? selectedCatalog.dimTwoSideOuter
+                              : "--"
+                          }}</b>
+                        </td>
+                        <td class="text-center">
+                          <b>{{
+                            selectedCatalog.dimTwoSideInner
+                              ? selectedCatalog.dimTwoSideInner
+                              : "--"
+                          }}</b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div
+              class="row mt-2"
+              *ngIf="selectedCatalog.comments"
+              style="border-top: 1px solid #d5d5d5"
+            >
+              <div class="col-sm-12 col-md-12 col-lg-12 p-0" pTooltip="Uwagi">
+                <div
+                  class="sb-stars-header"
+                  style="color: red; font-size: 10px"
+                >
+                  UWAGI:
+                </div>
+                <div class="pl-1" [innerHtml]="selectedCatalog.comments"></div>
+              </div>
+              <div
+                class="col-1 p-0 d-flex justify-content-center align-items-center"
+              >
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  (click)="copyCommentsToPosition()"
+                  matTooltip="Kopiuj do uwag w pozycji"
+                  icon="pi pi-arrow-down"
+                  class="p-button-sm sb-button gray"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <div class="row mb-2">
+      <div class="col text-center">
+        <span><b>STRONY</b></span>
+      </div>
+    </div>
+
+    <div formArrayName="postionSide">
+      <div
+        class="row sb-position-side"
+        *ngFor="let item of sides.controls; index as i"
+        [formGroupName]="i"
+      >
+        <div class="col-sm-12 col-md-7 col-lg-7 p-0">
+          <div class="row flex-nowrap sb-row-position-side">
+            <div class="col-sm-12 col-md-1 col-lg-1 sb-col-side count">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="removeSide(i)"
+                style="height: 25px"
+                pTooltip="Usuń stronę"
+                icon="pi pi-times"
+                class="p-button-sm sb-button red"
+              ></button>
+
+              <span class="text-center p-2">{{ i + 1 }}</span>
+            </div>
+
+            <div class="col-sm-12 col-md-3 col-lg-3 sb-col-side">
+              <label class="sb-small-label" for="side">Str. kształ.</label>
+              <p-autoComplete
+                formControlName="side"
+                autocomplete="off"
+                [suggestions]="sideSugFiltered"
+                (completeMethod)="searchSide($event)"
+                [dropdown]="true"
+                autocomplete="off"
+                [style]="{ width: '100%' }"
+                [completeOnFocus]="true"
+                appendTo="body"
+                (onSelect)="onSelectSide($event, i)"
+              >
+                <ng-template let-side pTemplate="item">
+                  <div class="catalog-dropdown-side">
+                    <div class="row">
+                      <div class="col">{{ side }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-autoComplete>
+
+              <p-checkbox
+                labelStyleClass="m-0 pl-2"
+                formControlName="hard"
+                [binary]="true"
+                label="Trudne"
+              >
+              </p-checkbox>
+            </div>
+
+            <div class="col-sm-12 col-md-4 col-lg-4 sb-col-side">
+              <label class="sb-small-label" for="filmNumber"
+                >Numer Okleiny</label
+              >
+              <p-autoComplete
+                formControlName="filmNumber"
+                [minLength]="1"
+                [suggestions]="filmSugFiltered"
+                (completeMethod)="searchFilm($event)"
+                [dropdown]="true"
+                autocomplete="off"
+                [style]="{ width: '100%' }"
+                [completeOnFocus]="true"
+                appendTo="body"
+                (onSelect)="onSelectFilm($event, i)"
+              >
+                <ng-template let-film pTemplate="item">
+                  <div class="catalog-dropdown-film">
+                    <div class="row">
+                      <div class="col-6">
+                        <div style="font-size: 16px">{{ film.number }}</div>
+                        <div style="font-size: 12px">{{ film.name }}</div>
+                      </div>
+                      <div
+                        class="col-6 pl-2 text-center"
+                        [ngSwitch]="film.status"
+                        style="font-size: 12px"
+                      >
+                        <div *ngSwitchCase="'DOSTEPNA'" class="status-dost">
+                          DOST.
+                        </div>
+                        <div
+                          *ngSwitchCase="'NIEDOSTEPNA'"
+                          class="status-niedost"
+                        >
+                          NIEDOST.
+                        </div>
+                        <div
+                          *ngSwitchCase="'DOSTEPNOSCOGRANICZONA'"
+                          class="status-ogr"
+                        >
+                          OGRAN.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-autoComplete>
+
+              <p-checkbox
+                labelStyleClass="m-0 pl-2"
+                formControlName="filmEntrusted"
+                [binary]="true"
+                label="Folia powierzona"
+              >
+              </p-checkbox>
+            </div>
+
+            <div class="col-sm-12 col-md-4 col-lg-4 sb-col-side">
+              <label class="sb-small-label" for="filmWidthId"
+                >Szer. Okl. (mm)*</label
+              >
+              <input
+                type="number"
+                inputmode="numeric"
+                min="0"
+                step="1"
+                formControlName="filmWidth"
+                inputId="filmWidthId"
+                class="w-100"
+                pInputText
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-sm-12 col-md-5 col-lg-5 p-0"
+          style="background-color: #dfdfdf"
+        >
+          <div class="row flex-nowrap sb-row-position-side">
+            <div formArrayName="profilDimensions" class="w-100">
+              <div
+                class="row w-100 m-0 rowsidesdim"
+                *ngFor="
+                  let dim of this.sides.controls[i]['controls'].profilDimensions
+                    .controls;
+                  index as j
+                "
+                [formGroupName]="j"
+              >
+                <div class="col-sm-12 col-md-6 col-lg-6 sb-col-side">
+                  <label class="sb-small-label" for="quantity">Ilość *</label>
+                  <input
+                    type="number"
+                    inputmode="numeric"
+                    min="0"
+                    step="1"
+                    formControlName="quantity"
+                    inputId="quantity"
+                    class="w-100"
+                    pInputText
+                  />
+                </div>
+
+                <div class="col-sm-12 col-md-5 col-lg-5 sb-col-side">
+                  <label class="sb-small-label" for="length"
+                    >Długość (mb)*</label
+                  >
+                  <p-autoComplete
+                    :min="0"
+                    [style]="{ width: '100%' }"
+                    [suggestions]="dimSugFiltered"
+                    formControlName="length"
+                    type="number"
+                    inputmode="numeric"
+                    [dropdown]="true"
+                    autocomplete="off"
+                    [completeOnFocus]="true"
+                    (focus)="searchDim($event)"
+                    (completeMethod)="searchDim($event)"
+                    (onSelect)="selectDim(i, j, $event.value)"
+                  >
+                    <ng-template let-dim pTemplate="item">
+                      <div class="catalog-dropdown-side">
+                        <div class="row">
+                          <div class="col">{{ dim.label }}</div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </p-autoComplete>
+                </div>
+
+                <div
+                  class="col-sm-12 col-md-1 col-lg-1 sb-col-side d-flex justify-content-center align-items-center"
+                >
+                  <button
+                    pButton
+                    type="button"
+                    (click)="removeDimension(i, j)"
+                    matTooltip="Usuń wymiar"
+                    matTooltipClass="tooltip-red"
+                    icon="pi pi-times"
+                    class="p-button-sm sb-button red"
+                  ></button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div
+                  class="col d-flex justify-content-center align-items-center"
+                >
+                  <button
+                    pButton
+                    pRipple
+                    type="button"
+                    (click)="addDimensions(i)"
+                    matTooltip="Dodaj wymiar"
+                    matTooltipClass="tooltip-green"
+                    icon="pi pi-plus"
+                    class="p-button-sm sb-button blue"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
+        <button
+          pButton
+          pRipple
+          type="button"
+          (click)="addSide()"
+          pTooltip="Dodaj stronę"
+          icon="pi pi-plus"
+          label="Dodaj stronę"
+          class="p-button-sm sb-button blue m-1"
+        ></button>
+
+        <button
+          [disabled]="sides.length == 0"
+          pButton
+          pRipple
+          type="button"
+          (click)="duplicateLastSide()"
+          pTooltip="Powielanie ostatniej pozycji"
+          icon="pi pi-angle-double-down"
+          label="Powiel stronę"
+          class="p-button-sm sb-button blue m-1"
+        ></button>
+      </div>
+    </div>
+
+    <hr />
+    <div class="form-group row mb-4 pt-1">
+      <div class="col">
+        <label class="sb-small-label" for="comment">Uwagi</label>
+        <p-editor
+          id="comment"
+          [formControl]="formOrderPosition.get('comment')"
+          [style]="{ height: '100px' }"
+        >
+        </p-editor>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateOrderPosition()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

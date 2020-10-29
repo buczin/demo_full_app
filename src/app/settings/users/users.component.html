@@ -1,0 +1,259 @@
+<div class="row mb-2 ml-0">
+  <button (click)="backClicked()" mat-raised-button>
+    <i class="pi pi-chevron-left"></i>
+  </button>
+</div>
+<div class="row">
+  <div class="col-2">
+    <div
+      class="bg-white shadow-sm w-100 h-100 p-2 rounded"
+      style="text-align: center"
+    >
+      <button
+        pButton
+        type="button"
+        (click)="openDialogAddUser()"
+        label="Dodaj użytkownika"
+        class="p-button-sm sb-button gray"
+      ></button>
+    </div>
+  </div>
+  <div class="col-10">
+    <div class="row">
+      <p-table
+        #us
+        [value]="users"
+        dataKey="id"
+        [filterDelay]="0"
+        [globalFilterFields]="['username']"
+      >
+        <ng-template pTemplate="caption">
+          <div class="row">
+            <div class="col">
+              <span>Użytkownicy</span>
+            </div>
+            <div class="col" style="text-align: end">
+              <input
+                pInputText
+                type="text"
+                (input)="us.filterGlobal($event.target.value, 'contains')"
+                placeholder="Wyszukiwarka"
+                class="p-inputtext"
+              />
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 40px">ID</th>
+            <th style="width: 120px">Login</th>
+            <th style="width: 120px">Imie Nazwisko</th>
+            <th style="width: 60px" pTooltip="Aktywny">Akt.</th>
+            <th style="width: 120px">Role</th>
+
+            <th style="width: 60px" pTooltip="Katalog Odczyt">Kat. O.</th>
+            <th style="width: 60px" pTooltip="Katalog Zapis">Kat. Z.</th>
+            <th style="width: 60px" pTooltip="Katalog Usuwanie">Kat. U.</th>
+
+            <th style="width: 60px" pTooltip="System Odczyt">Sys. O.</th>
+            <th style="width: 60px" pTooltip="System Zapis">Sys. Z.</th>
+            <th style="width: 60px" pTooltip="System Usuwanie">Sys. U.</th>
+
+            <th style="width: 60px" pTooltip="Klient Odczyt">Kl. O.</th>
+            <th style="width: 60px" pTooltip="Klient Zapis">Kl. Z.</th>
+            <th style="width: 60px" pTooltip="Klient Usuwanie">Kl. U.</th>
+
+            <th style="width: 60px" pTooltip="Okleiny Odczyt">Okl. O.</th>
+            <th style="width: 60px" pTooltip="Okleiny Zapis">Okl. Z.</th>
+            <th style="width: 60px" pTooltip="Okleiny Usuwanie">Okl. U.</th>
+
+            <th style="width: 60px" pTooltip="Producenci Odczyt">Prod. O.</th>
+            <th style="width: 60px" pTooltip="Producenci Zapis">Prod. Z.</th>
+            <th style="width: 60px" pTooltip="Producenci Usuwanie">Prod. U.</th>
+
+            <th style="width: 60px" pTooltip="Oferta Odczyt">Oferta O.</th>
+            <th style="width: 60px" pTooltip="Oferta Zapis">Oferta Z.</th>
+            <th style="width: 60px" pTooltip="Oferta Usuwanie">Oferta U.</th>
+
+            <th style="width: 60px" pTooltip="Produkcja Odczyt">
+              Produkcja O.
+            </th>
+            <th style="width: 60px" pTooltip="Produkcja Zapis">Produkcja Z.</th>
+            <th style="width: 60px" pTooltip="Produkcja Usuwanie">
+              Produkcja U.
+            </th>
+
+            <th style="width: 120px"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td>
+              {{ rowData.id }}
+            </td>
+            <td>
+              {{ rowData.username }}
+            </td>
+            <td>
+              {{ rowData.name }}
+            </td>
+            <td>
+              {{ yesNo(rowData.active) }}
+            </td>
+            <td>
+              {{ rowData.role }}
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.catalogRead">
+                {{ yesNo(rowData.catalogRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.catalogWrite">
+                {{ yesNo(rowData.catalogWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.catalogDelete">
+                {{ yesNo(rowData.catalogDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.systemRead">
+                {{ yesNo(rowData.systemRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.systemWrite">
+                {{ yesNo(rowData.systemWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.systemDelete">
+                {{ yesNo(rowData.systemDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.clientRead">
+                {{ yesNo(rowData.clientRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.clientWrite">
+                {{ yesNo(rowData.clientWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.clientDelete">
+                {{ yesNo(rowData.clientDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.filmRead">
+                {{ yesNo(rowData.filmRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.filmWrite">
+                {{ yesNo(rowData.filmWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.filmDelete">
+                {{ yesNo(rowData.filmDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.producerRead">
+                {{ yesNo(rowData.producerRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.producerWrite">
+                {{ yesNo(rowData.producerWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.producerDelete">
+                {{ yesNo(rowData.producerDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.offerRead">
+                {{ yesNo(rowData.offerRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.offerWrite">
+                {{ yesNo(rowData.offerWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.offerDelete">
+                {{ yesNo(rowData.productionDelete) }}</span
+              >
+            </td>
+
+            <td>
+              <span [class]="'user-badge status-' + rowData.productionRead">
+                {{ yesNo(rowData.productionRead) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.productionWrite">
+                {{ yesNo(rowData.productionWrite) }}</span
+              >
+            </td>
+            <td>
+              <span [class]="'user-badge status-' + rowData.productionDelete">
+                {{ yesNo(rowData.productionDelete) }}</span
+              >
+            </td>
+
+            <td class="edit-col">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="openDialogUpdateUser(rowData)"
+                icon="pi pi-pencil"
+                class="p-button-sm sb-button blue"
+                pTooltip="Edycja Użytkownika"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="openDialogChangePass(rowData)"
+                icon="pi pi-key"
+                class="p-button-sm ml-1 sb-button blue"
+                pTooltip="Zmiana hasła"
+              ></button>
+
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="onDeleteUser(rowData)"
+                icon="pi pi-trash"
+                class="p-button-sm ml-1 sb-button red"
+                pTooltip="Usuwanie"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" style="text-align: left">Brak danych.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

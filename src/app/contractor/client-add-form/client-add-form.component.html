@@ -1,0 +1,319 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formClient" class="sb-form">
+    <div class="form-group m-0 p-0">
+      <div>
+        <p class="p-0 m-0"><b>DANE</b></p>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="name">Nazwa*</label>
+          <textarea
+            [style]="{ width: '100%' }"
+            pInputTextarea
+            type="text"
+            id="name"
+            [formControl]="formClient.get('name')"
+            required
+          >
+          </textarea>
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('name').hasError('required') &&
+              formClient.get('name').touched
+            "
+          >
+            musi być wypełnione
+          </p>
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="shortName">Skrócona nazwa</label>
+          <input
+            pInputText
+            type="text"
+            id="shortName"
+            [formControl]="formClient.get('shortName')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="symfoniaId">Symfonia ID</label>
+          <input
+            pInputText
+            type="text"
+            id="symfoniaId"
+            [formControl]="formClient.get('symfoniaId')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="nip">NIP*</label>
+          <input
+            [attr.disabled]="clientData ? true : null"
+            pInputText
+            type="text"
+            id="nip"
+            [formControl]="formClient.get('nip')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('nip').hasError('nipFormat') &&
+              formClient.get('nip').touched
+            "
+          >
+            niepoprawny nip
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="regon">REGON</label>
+          <input
+            pInputText
+            type="text"
+            id="regon"
+            [formControl]="formClient.get('regon')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('regon').hasError('regonFormat') &&
+              formClient.get('regon').touched
+            "
+          >
+            niepoprawny regon
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="pesel">PESEL</label>
+          <input
+            [attr.disabled]="clientData ? true : null"
+            pInputText
+            type="text"
+            id="pesel"
+            [formControl]="formClient.get('pesel')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div>
+        <p class="mb-0 mt-4"><b>ADRES</b></p>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="town">Miasto</label>
+          <input
+            pInputText
+            type="text"
+            id="town"
+            [formControl]="formClient.get('town')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="street">Ulica</label>
+          <input
+            pInputText
+            type="text"
+            id="street"
+            [formControl]="formClient.get('street')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-2 mb-0 pb-0" style="padding: 0.5rem">
+          <label class="mb-0" for="houseNumber">Numer budynku</label>
+          <input
+            pInputText
+            type="text"
+            id="houseNumber"
+            [formControl]="formClient.get('houseNumber')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-2 mb-0 pb-0" style="padding: 0.5rem">
+          <label class="mb-0" for="flatNumber">Numer mieszkania</label>
+          <input
+            pInputText
+            type="text"
+            id="flatNumber"
+            [formControl]="formClient.get('flatNumber')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="postalCode">Kod Pocztowy</label>
+          <input
+            pInputText
+            type="text"
+            id="postalCode"
+            [formControl]="formClient.get('postalCode')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="province">Województwo</label>
+          <input
+            pInputText
+            type="text"
+            id="province"
+            [formControl]="formClient.get('province')"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="country">Kraj</label>
+          <input
+            pInputText
+            type="text"
+            id="country"
+            [formControl]="formClient.get('country')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div>
+        <p class="mb-0 mt-4"><b>DANE KONTAKTOWE</b></p>
+      </div>
+
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="email">EMAIL</label>
+          <input
+            pInputText
+            type="text"
+            id="email"
+            [formControl]="formClient.get('email')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('email').hasError('email') &&
+              formClient.get('email').touched
+            "
+          >
+            niepoprawny email
+          </p>
+        </div>
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="phonenumber">Numer telefonu</label>
+          <input
+            pInputText
+            type="text"
+            id="phonenumber"
+            [formControl]="formClient.get('phonenumber')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('phonenumber').hasError('minLength') &&
+              formClient.get('phonenumber').touched
+            "
+          >
+            niepoprawny numer telefonu
+          </p>
+        </div>
+
+        <div class="p-field p-col-4 mb-0 pb-0">
+          <label class="mb-0" for="phonenumber2">Numer telefonu 2</label>
+          <input
+            pInputText
+            type="text"
+            id="phonenumber2"
+            [formControl]="formClient.get('phonenumber2')"
+            autocomplete="off"
+          />
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              formClient.get('phonenumber2').hasError('minLength') &&
+              formClient.get('phonenumber2').touched
+            "
+          >
+            niepoprawny numer telefonu
+          </p>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 mb-0 pb-0">
+          <label class="mb-0" for="www">WWW</label>
+          <input
+            pInputText
+            type="text"
+            id="www"
+            [formControl]="formClient.get('www')"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!clientData"
+      [disabled]="formClient.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addNewClient()"
+      pTooltip="Dodaj nowego kontrahenta"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="clientData"
+      [disabled]="formClient.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateClient()"
+      pTooltip="Aktualizacja kontrahenta"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

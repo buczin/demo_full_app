@@ -1,0 +1,124 @@
+<div class="container">
+  <div class="row mb-2 ml-0">
+    <button (click)="backClicked()" mat-raised-button>
+      <i class="pi pi-chevron-left"></i>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <div
+        class="bg-white shadow-sm w-100 h-100 p-2 rounded"
+        style="text-align: center"
+      >
+        <button
+          pButton
+          type="button"
+          (click)="openDialogAddCompany()"
+          label="Dodaj firmę"
+          class="p-button-sm sb-button gray"
+        ></button>
+      </div>
+    </div>
+    <div class="col-10">
+      <div class="row">
+        <p-table
+          #mc
+          [value]="mycompanies"
+          dataKey="id"
+          [filterDelay]="0"
+          [globalFilterFields]="['name']"
+          [resizableColumns]="true"
+          columnResizeMode="expand"
+        >
+          <ng-template pTemplate="caption">
+            Moje Firmy
+            <div class="ui-table-globalfilter-container">
+              <input
+                pInputText
+                type="text"
+                (input)="mc.filterGlobal($event.target.value, 'contains')"
+                placeholder="Wyszukiwarka"
+              />
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 40px">ID</th>
+              <th pResizableColumn>Nazwa</th>
+              <th pResizableColumn>Identyfikator</th>
+              <th pResizableColumn>NIP</th>
+              <th pResizableColumn>REGON</th>
+              <th pResizableColumn>Email firmy</th>
+              <th pResizableColumn>Email FV</th>
+              <th pResizableColumn>Nr. Tel.</th>
+              <th pResizableColumn>Logo</th>
+              <th pResizableColumn>www</th>
+              <th style="width: 8em"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData>
+            <tr>
+              <td class="ui-resizable-column">
+                {{ rowData.id }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.name }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.shortId }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.nip }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.regon }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.email }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.fvemail }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.phonenumber }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.logoLink }}
+              </td>
+              <td class="ui-resizable-column">
+                {{ rowData.www }}
+              </td>
+
+              <td class="edit-col">
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  (click)="openDialogUpdateCompany(rowData)"
+                  icon="pi pi-pencil"
+                  class="p-button-sm sb-button blue"
+                  pTooltip="Edycja firmy"
+                ></button>
+
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  (click)="onDeleteMyCompant(rowData)"
+                  icon="pi pi-trash"
+                  class="p-button-sm ml-1 sb-button red"
+                  pTooltip="Usuwanie"
+                ></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

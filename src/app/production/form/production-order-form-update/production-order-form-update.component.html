@@ -1,0 +1,186 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formProductionOrderUpdate" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="myCompany"
+          >Zlecenie do firmy *</label
+        >
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          placeholder="Wybierz firmę"
+          id="myCompany"
+          [options]="myCompanyData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formProductionOrderUpdate.get('myCompany')"
+          required
+        >
+        </p-dropdown>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProductionOrderUpdate.get('myCompany').hasError('required') &&
+            formProductionOrderUpdate.get('myCompany').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="client">Klient *</label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          placeholder="Wybierz klienta"
+          id="client"
+          [options]="clientData"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formProductionOrderUpdate.get('client')"
+          required
+        ></p-dropdown>
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formProductionOrderUpdate.get('client').hasError('required') &&
+            formProductionOrderUpdate.get('client').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+      </div>
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="numberClientOrder"
+          >Numer zlecenia klienta</label
+        >
+        <input
+          size="30"
+          pInputText
+          [formControl]="formProductionOrderUpdate.get('numberClientOrder')"
+          placeholder="numer zlecenia klienta"
+          type="text"
+          id="numberClientOrder"
+          class="form-control ui-inputtext ui-corner-all ui-state-default ui-widget"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-6 col-lg-6">
+        <label class="sb-small-label" for="statusOrder">Status Zlecenia</label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          appendTo="body"
+          placeholder="Wybierz status"
+          id="statusOrder"
+          [options]="_statusOrder"
+          [filter]="true"
+          filterBy="name,value.name"
+          [formControl]="formProductionOrderUpdate.get('statusOrder')"
+        ></p-dropdown>
+      </div>
+      <div class="col-g-12 col-md-6 col-lg-6 d-flex align-items-center">
+        <mat-slide-toggle
+          (change)="changeCompleted()"
+          [formControl]="formProductionOrderUpdate.get('completed')"
+          [color]="color"
+          [checked]="true"
+        >
+          Ukończono
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12 text-center">
+        <span><b>DATY</b></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-4 col-lg-4">
+        <label class="sb-small-label" for="dateAcceptanceOrder"
+          >Przyjęcia</label
+        >
+        <p-calendar
+          inputId="dateAcceptanceOrder"
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          [locale]="pl"
+          [formControl]="formProductionOrderUpdate.get('dateAcceptanceOrder')"
+          [showIcon]="true"
+        >
+        </p-calendar>
+      </div>
+      <div class="col-g-12 col-md-4 col-lg-4">
+        <label class="sb-small-label" for="dateCompletedOrder">Wykonania</label>
+        <p-calendar
+          inputId="dateCompletedOrder"
+          [disabled]="!this.formProductionOrderUpdate.value.completed"
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          [locale]="pl"
+          [formControl]="formProductionOrderUpdate.get('dateCompletedOrder')"
+          [showIcon]="true"
+        >
+        </p-calendar>
+      </div>
+      <div class="col-g-12 col-md-4 col-lg-4">
+        <label class="sb-small-label" for="dateReceiptOrder">Odbioru</label>
+        <p-calendar
+          inputId="dateReceiptOrder"
+          [disabled]="!this.formProductionOrderUpdate.value.completed"
+          dateFormat="yy-mm-dd"
+          appendTo="body"
+          [locale]="pl"
+          [formControl]="formProductionOrderUpdate.get('dateReceiptOrder')"
+          [showIcon]="true"
+        >
+        </p-calendar>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      [disabled]="formProductionOrderUpdate.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateProductionOrder()"
+      pTooltip="Aktualizuj"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

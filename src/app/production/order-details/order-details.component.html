@@ -1,0 +1,824 @@
+<p-contextMenu #sideContextMenuTest [model]="sideMenuItems"></p-contextMenu>
+<p-contextMenu
+  #positionContextMenuTest
+  [model]="positionMenuItems"
+></p-contextMenu>
+<p-contextMenu #usedContextMenuTest [model]="usedMenuItems"></p-contextMenu>
+<div class="sb-side-context-menu"></div>
+
+<div
+  [class.isPrinting]="printService.isPrinting"
+  class="container-order-details"
+>
+  <div class="row mb-2">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="backClicked()"
+        icon="pi pi-chevron-left"
+        style="width: 50px !important"
+        class="p-button-sm sb-button blue back"
+      ></button>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div class="float-right" *ngIf="productionOrder.myCompany.logoLink">
+        <img height="50px" [src]="productionOrder.myCompany.logoLink" alt="" />
+      </div>
+      <p *ngIf="!productionOrder.myCompany.logoLink" class="float-right">
+        {{ productionOrder.myCompany.name }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-ticket"></i>
+        </div>
+        <div class="stats-numbers">{{ productionOrder.orderNumber }}</div>
+        <div class="stats-subtitle">Zlecenie nr.:</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-ticket"></i>
+        </div>
+        <div class="stats-numbers">
+          {{
+            productionOrder.numberClientOrder
+              ? productionOrder.numberClientOrder
+              : "--"
+          }}
+        </div>
+        <div class="stats-subtitle">Nr. zlec. kontrahenta:</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="stats-numbers">{{ productionOrder.client.name }}</div>
+        <div class="stats-subtitle">Kontrahent</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stats-numbers">
+          {{
+            productionService.statusOrderSwitchLang(productionOrder.statusOrder)
+          }}
+        </div>
+        <div class="stats-subtitle">Status</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <div class="sb-stats">
+        <div class="stats-icon">
+          <i class="pi pi-plus-circle"></i>
+        </div>
+        <div class="stats-numbers">{{ productionOrder.createdBy }}</div>
+        <div class="stats-subtitle">Zlecenie utworzone przez</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div class="sb-stats">
+        <div class="sb-dates-stats">
+          <div>
+            <div class="stats-icon">
+              <mat-icon>flight_land</mat-icon>
+            </div>
+            <div class="stats-numbers">
+              {{
+                productionOrder.dateAcceptanceOrder
+                  ? productionOrder.dateAcceptanceOrder
+                  : "--"
+              }}
+            </div>
+            <div class="stats-subtitle">Data przyjęcia</div>
+          </div>
+          <div>
+            <div class="stats-icon">
+              <i class="pi pi-check"></i>
+            </div>
+            <div class="stats-numbers">
+              {{
+                productionOrder.dateCompletedOrder
+                  ? productionOrder.dateCompletedOrder
+                  : "--"
+              }}
+            </div>
+            <div class="stats-subtitle">Data wykonania</div>
+          </div>
+          <div>
+            <div class="stats-icon">
+              <mat-icon>flight_takeoff</mat-icon>
+            </div>
+            <div class="stats-numbers">
+              {{
+                productionOrder.dateReceiptOrder
+                  ? productionOrder.dateReceiptOrder
+                  : "--"
+              }}
+            </div>
+            <div class="stats-subtitle">Data odbioru</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="row sb-progress-bar"
+    [ngClass]="{ hide: productionService.loadingDataValue >= 100 }"
+  >
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <p-progressBar
+        [value]="productionService.loadingDataValue"
+      ></p-progressBar>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <p-toolbar styleClass="sb-toolbar">
+        <div class="p-toolbar-group-left">
+          <button
+            [disabled]="
+              !deleteOrderIf.getValue() ||
+              productionService.loadingDataValue != 100
+            "
+            pButton
+            pRipple
+            type="button"
+            (click)="showDialogToAddOrderPosition()"
+            pTooltip="Dodanie pojedyńczej pozycji"
+            icon="pi pi-plus"
+            label="Pojedyńcza pozycja"
+            class="p-button-sm sb-button blue"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="showDialogAddFromExcel()"
+            pTooltip="Kreator pozycji"
+            icon="pi pi-plus"
+            label="Z Excela"
+            class="p-button-sm sb-button blue"
+          ></button>
+        </div>
+      </p-toolbar>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <p-toolbar styleClass="sb-toolbar">
+        <div class="p-toolbar-group-left">
+          <button
+            *ngIf="auth.isAdmin"
+            pButton
+            pRipple
+            type="button"
+            (click)="showDialogToUpdateOrder(productionOrder)"
+            pTooltip="Aktualizacja danych zlecenia"
+            icon="pi pi-pencil"
+            label="Aktualizuj"
+            class="p-button-sm sb-button gray"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="showChangeOrderStatusForm()"
+            pTooltip="Zmiana statusu zlecenia"
+            icon="pi pi-check-circle"
+            label="Zmiana statusu"
+            class="p-button-sm sb-button gray"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="printDialgOptions()"
+            pTooltip="Zmiana statusu zlecenia"
+            icon="pi pi-print"
+            label="Drukowanie"
+            class="p-button-sm sb-button yellow"
+          ></button>
+        </div>
+        <div class="p-toolbar-group-right">
+          <button
+            [disabled]="!deleteOrderIf.getValue()"
+            pButton
+            type="button"
+            (click)="confirmDeleteOrder(orderNumber)"
+            pTooltip="Usunięcie zlecenia"
+            pTooltipClass="tooltip-red"
+            icon="pi pi-trash"
+            class="p-button-sm sb-button red"
+          ></button>
+        </div>
+      </p-toolbar>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p-tabView>
+        <p-tabPanel header="Edycja" leftIcon="pi pi-pencil">
+          <!-- ============================ POSITIONS TABLE ================================-->
+
+          <div class="row w-100 m-0">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <p-table
+                #zl1
+                styleClass="p-datatable-striped"
+                [value]="orderPosition"
+                dataKey="id"
+                [frozenColumns]="frozenCols"
+                [resizableColumns]="true"
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first} do {last} z {totalRecords}"
+                [autoLayout]="true"
+                [rowHover]="true"
+                [reorderableColumns]="true"
+                (onRowReorder)="reOrder(zl1)"
+                [(contextMenuSelection)]="selectedPosition"
+                [contextMenu]="positionContextMenuTest"
+              >
+                <ng-template pTemplate="caption">
+                  <div style="text-align: left" class="d-inline-flex flex-wrap">
+                    <div>
+                      <span style="display: grid; font-size: 10px"
+                        >Kolumna pozycji</span
+                      >
+                      <p-multiSelect
+                        [options]="columns"
+                        [(ngModel)]="selectedColumns"
+                        optionLabel="label"
+                        selectedItemsLabel="{0} wybranych"
+                        [style]="{ minWidth: '200px' }"
+                        defaultLabel="Kolumny pozycji"
+                      >
+                      </p-multiSelect>
+                    </div>
+                    <div>
+                      <span style="display: grid; font-size: 10px"
+                        >Kolumna strony</span
+                      >
+                      <p-multiSelect
+                        class="ml-1"
+                        [options]="sideColumns"
+                        [(ngModel)]="sideSelectedColumns"
+                        optionLabel="label"
+                        selectedItemsLabel="{0} wybranych"
+                        [style]="{ minWidth: '200px' }"
+                        defaultLabel="Kolumny strony"
+                      ></p-multiSelect>
+                    </div>
+                    <div>
+                      <span style="display: grid; font-size: 10px">Widok</span>
+                      <button
+                        pButton
+                        pRipple
+                        type="button"
+                        (click)="standardView()"
+                        matTooltip="Widok tabeli standardowy"
+                        icon="pi pi-angle-down"
+                        label="Standard"
+                        class="p-button-sm sb-button o-gray m-1"
+                      ></button>
+                    </div>
+                    <div>
+                      <span style="display: grid; font-size: 10px"
+                        >Kolejność</span
+                      >
+                      <button
+                        pButton
+                        pRipple
+                        type="button"
+                        (click)="saveReOrder(zl1)"
+                        matTooltip="Zapisz kolejność pozycji według sortowania"
+                        icon="pi pi-angle-down"
+                        label="Zapisz kolejność"
+                        class="p-button-sm sb-button gray m-1"
+                      ></button>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                  <tr class="header-outer-table">
+                    <th class="col20"></th>
+                    <!-- <th style="width: 40px;"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th> -->
+                    <th class="col20" pSortableColumn="positionNumber">
+                      Nr.<p-sortIcon field="positionNumber"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="profilNumber">
+                      Numer kształ.<p-sortIcon field="profilNumber">
+                      </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="profilType">
+                      Rodzaj kształ.<p-sortIcon field="profilType">
+                      </p-sortIcon>
+                    </th>
+                    <th class="text-center">Strony</th>
+                    <th
+                      *ngIf="checkShow('numberFv')"
+                      pSortableColumn="numberFv"
+                    >
+                      Nr.faktury
+                      <p-sortIcon field="numberFv"></p-sortIcon>
+                    </th>
+                    <th
+                      class="col70"
+                      *ngIf="checkShow('accepted')"
+                      matTooltip="Zaakceptowano"
+                    >
+                      Zaakcep.
+                    </th>
+                    <th class="col90" *ngIf="checkShow('statusOrderPosition')">
+                      Status
+                    </th>
+                    <th
+                      class="col70"
+                      *ngIf="checkShow('completed')"
+                      matTooltip="Wykonano"
+                    >
+                      Wykonano
+                    </th>
+                    <th
+                      class="col120"
+                      *ngIf="checkShow('dateCompletedPosition')"
+                    >
+                      Data wykonania
+                    </th>
+                    <th
+                      class="col70"
+                      *ngIf="checkShow('warranty')"
+                      matTooltip="Gwarancja"
+                    >
+                      Gwarancja
+                    </th>
+                    <th class="col70" *ngIf="checkShow('comment')">Uwagi</th>
+                  </tr>
+                </ng-template>
+                <ng-template
+                  class="pSideRow"
+                  pTemplate="body"
+                  let-expanded="expanded"
+                  let-rowData
+                  let-ri="rowIndex"
+                  let-index="rowIndex"
+                >
+                  <tr
+                    class="pOrder positionMenu"
+                    [pReorderableRow]="index"
+                    (contextmenu)="
+                      positionContextMenu(
+                        usedContextMenuTest,
+                        sideContextMenuTest,
+                        positionContextMenuTest,
+                        $event,
+                        rowData
+                      )
+                    "
+                  >
+                    <td>
+                      <i
+                        class="pi pi-bars"
+                        style="display: flex; justify-content: center"
+                        pReorderableRowHandle
+                      ></i>
+                    </td>
+                    <td [class]="'accept-badge accept-' + rowData.accepted">
+                      {{ rowData.positionNumber }}
+                    </td>
+                    <td>{{ rowData.profilNumber }}</td>
+                    <td>{{ rowData.profilType }}</td>
+
+                    <td class="p-0" style="height: 30px">
+                      <p-table
+                        #zlSide
+                        [value]="rowData.postionSide"
+                        [resizableColumns]="true"
+                        [autoLayout]="true"
+                        [rowHover]="true"
+                      >
+                        <ng-template pTemplate="header">
+                          <tr class="pSide h-100 header-inner-table">
+                            <th class="col70">Strona</th>
+                            <th class="col120">Nr. Okl.</th>
+                            <th class="col70">Szer. Okl</th>
+                            <th
+                              *ngIf="checkShowSide('usedFilm')"
+                              class="text-center col150"
+                            >
+                              Zużycie
+                            </th>
+                            <th class="text-center col150">Wymiary</th>
+                            <th
+                              class="col70"
+                              *ngIf="checkShowSide('sumAllDimensions')"
+                            >
+                              Łącznie mb
+                            </th>
+                            <th class="col70" *ngIf="checkShowSide('plnMb')">
+                              pln/mb
+                            </th>
+                            <th class="col70" *ngIf="checkShowSide('costSet')">
+                              kpl. 6Mb
+                            </th>
+                            <th
+                              class="col70"
+                              *ngIf="checkShowSide('costSetup')"
+                            >
+                              Ust.
+                            </th>
+                            <th
+                              class="col70"
+                              *ngIf="checkShowSide('costChangeColor')"
+                            >
+                              Zm. kol.
+                            </th>
+                            <th
+                              class="col120"
+                              *ngIf="checkShowSide('employees')"
+                            >
+                              Pracownicy
+                            </th>
+                            <th class="col70" *ngIf="checkShowSide('glue')">
+                              Klej
+                            </th>
+                            <th
+                              class="col70"
+                              *ngIf="checkShowSide('filmEntrusted')"
+                            >
+                              Okl. powierzona
+                            </th>
+                            <th class="col70" *ngIf="checkShowSide('hard')">
+                              Trudne
+                            </th>
+                            <th
+                              class="col70"
+                              *ngIf="checkShowSide('statusPositionSide')"
+                            >
+                              Status
+                            </th>
+                          </tr>
+                        </ng-template>
+                        <ng-template
+                          pTemplate="body"
+                          let-rowSide
+                          let-ri="rowIndex"
+                        >
+                          <tr
+                            class="positionSides sideMenu"
+                            (contextmenu)="
+                              sideContextMenu(
+                                usedContextMenuTest,
+                                sideContextMenuTest,
+                                positionContextMenuTest,
+                                $event,
+                                rowData
+                              )
+                            "
+                          >
+                            <td class="col70">{{ rowSide.side }}</td>
+                            <td class="col120">{{ rowSide.filmNumber }}</td>
+                            <td class="col70">{{ rowSide.filmWidth }}</td>
+                            <td
+                              *ngIf="checkShowSide('usedFilm')"
+                              class="p-0 col210 usedMenu"
+                              (contextmenu)="
+                                usedContextMenu(
+                                  usedContextMenuTest,
+                                  sideContextMenuTest,
+                                  positionContextMenuTest,
+                                  $event,
+                                  rowData
+                                )
+                              "
+                            >
+                              <div
+                                class="text-center"
+                                *ngIf="rowSide.usedFilm.length == 0"
+                              >
+                                ---
+                              </div>
+                              <p-table
+                                [style]="{ height: '100%' }"
+                                [tableStyle]="{ height: '100%' }"
+                                *ngIf="rowSide.usedFilm.length != 0"
+                                #zlUse
+                                [value]="rowSide.usedFilm"
+                                [resizableColumns]="true"
+                                [autoLayout]="true"
+                                [rowHover]="true"
+                              >
+                                <ng-template
+                                  style="height: 100%"
+                                  pTemplate="header"
+                                >
+                                  <tr class="pSideDim h-100">
+                                    <th class="p-0 col70 text-center">
+                                      Szer. (mm)
+                                    </th>
+                                    <th class="p-0 col70 text-center">
+                                      Dł. (mb)
+                                    </th>
+                                    <th class="p-0 col70 text-center">
+                                      Suma m2
+                                    </th>
+                                  </tr>
+                                </ng-template>
+                                <ng-template
+                                  style="height: 100%"
+                                  pTemplate="body"
+                                  let-rowUse
+                                  let-ri="rowIndex"
+                                >
+                                  <tr class="positionUse col210 h-100">
+                                    <td class="p-0 col70">
+                                      {{ rowUse.width }}
+                                    </td>
+                                    <td class="p-0 col70">
+                                      {{ rowUse.length }}
+                                    </td>
+                                    <td class="p-0 col70">
+                                      {{ rowUse.sumM2 | number: "1.0-2" }}
+                                    </td>
+                                  </tr>
+                                </ng-template>
+                              </p-table>
+                            </td>
+                            <td class="p-0 col210" style="height: 25px">
+                              <div
+                                class="text-center"
+                                *ngIf="rowSide.profilDimensions.length == 0"
+                              >
+                                ---
+                              </div>
+                              <p-table
+                                [style]="{ height: '100%' }"
+                                [tableStyle]="{ height: '100%' }"
+                                *ngIf="rowSide.profilDimensions.length != 0"
+                                #zlDim
+                                [value]="rowSide.profilDimensions"
+                                [resizableColumns]="true"
+                                [autoLayout]="true"
+                                [rowHover]="true"
+                              >
+                                <ng-template
+                                  style="height: 100%"
+                                  pTemplate="header"
+                                >
+                                  <tr class="pSideDim h-100">
+                                    <th class="p-0 col70 text-center">
+                                      Sztuki
+                                    </th>
+                                    <th class="p-0 col70 text-center">
+                                      Dł. (mb)
+                                    </th>
+                                    <th class="p-0 col70 text-center">
+                                      Suma mb
+                                    </th>
+                                  </tr>
+                                </ng-template>
+                                <ng-template
+                                  style="height: 100%"
+                                  pTemplate="body"
+                                  let-rowDim
+                                  let-ri="rowIndex"
+                                >
+                                  <tr class="positionDim col210 h-100">
+                                    <td class="p-0 col70">
+                                      {{ rowDim.quantity }}
+                                    </td>
+                                    <td class="p-0 col70">
+                                      {{ rowDim.length }}
+                                    </td>
+                                    <td class="p-0 col70">
+                                      {{ rowDim.sumMb | number: "1.0-2" }}
+                                    </td>
+                                  </tr>
+                                </ng-template>
+                              </p-table>
+                            </td>
+                            <td
+                              *ngIf="checkShowSide('sumAllDimensions')"
+                              class="col70"
+                            >
+                              {{ rowSide.sumAllDimensions | number: "1.0-2" }}
+                            </td>
+                            <td *ngIf="checkShowSide('plnMb')" class="col70">
+                              {{ rowSide.plnMb != 0 ? rowSide.plnMb : "" }}
+                            </td>
+                            <td *ngIf="checkShowSide('costSet')" class="col70">
+                              {{ rowSide.costSet != 0 ? rowSide.costSet : "" }}
+                            </td>
+                            <td
+                              *ngIf="checkShowSide('costSetup')"
+                              class="col70"
+                            >
+                              {{
+                                rowSide.costSetup != 0 ? rowSide.costSetup : ""
+                              }}
+                            </td>
+                            <td
+                              *ngIf="checkShowSide('costChangeColor')"
+                              class="col70"
+                            >
+                              {{
+                                rowSide.costChangeColor != 0
+                                  ? rowSide.costChangeColor
+                                  : ""
+                              }}
+                            </td>
+
+                            <td
+                              *ngIf="checkShowSide('employees')"
+                              class="col120"
+                            >
+                              {{ rowSide.employees }}
+                            </td>
+                            <td *ngIf="checkShowSide('glue')" class="col70">
+                              {{ rowSide.glue }}
+                            </td>
+                            <td
+                              *ngIf="checkShowSide('filmEntrusted')"
+                              class="col70"
+                            >
+                              <span
+                                [class]="
+                                  'yesno-badge yesno-' + !rowSide.filmEntrusted
+                                "
+                                >{{ yesNo(rowSide.filmEntrusted) }}</span
+                              >
+                            </td>
+                            <td *ngIf="checkShowSide('hard')" class="col70">
+                              <span
+                                [class]="'yesno-badge yesno-' + !rowSide.hard"
+                                >{{ yesNo(rowSide.hard) }}</span
+                              >
+                            </td>
+
+                            <td
+                              *ngIf="checkShowSide('statusPositionSide')"
+                              class="col70"
+                            >
+                              {{
+                                productionService.statusPositionSideSwitchLang(
+                                  rowSide.statusPositionSide
+                                )
+                              }}
+                            </td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </td>
+                    <td *ngIf="checkShow('numberFv')">
+                      {{ rowData.numberFv }}
+                    </td>
+                    <td class="col70" *ngIf="checkShow('accepted')">
+                      <span [class]="'yesno-badge yesno-' + rowData.accepted">{{
+                        yesNo(rowData.accepted)
+                      }}</span>
+                    </td>
+                    <td *ngIf="checkShow('statusOrderPosition')">
+                      {{
+                        productionService.statusOrderPositionSwitchLang(
+                          rowData.statusOrderPosition
+                        )
+                      }}
+                    </td>
+                    <td class="col70" *ngIf="checkShow('completed')">
+                      <span
+                        [class]="'yesno-badge yesno-' + rowData.completed"
+                        >{{ yesNo(rowData.completed) }}</span
+                      >
+                    </td>
+                    <td *ngIf="checkShow('dateCompletedPosition')">
+                      {{ rowData.dateCompletedPosition }}
+                    </td>
+                    <td class="col70" *ngIf="checkShow('warranty')">
+                      <span [class]="'yesno-badge yesno-' + rowData.warranty">{{
+                        yesNo(rowData.warranty)
+                      }}</span>
+                    </td>
+                    <td *ngIf="checkShow('comment')">
+                      <a
+                        *ngIf="rowData.comment"
+                        href="#"
+                        [pRowToggler]="rowData"
+                      >
+                        <i
+                          [ngClass]="
+                            expanded
+                              ? 'pi pi-chevron-down'
+                              : 'pi pi-chevron-right'
+                          "
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td [attr.colspan]="length" style="text-align: left">
+                      Brak danych.
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                  <tr>
+                    <td [attr.colspan]="length">
+                      <div
+                        class="p-grid ui-fluid"
+                        style="font-size: 16px; padding: 20px"
+                        [@rowExpansionTrigger]="'active'"
+                      >
+                        <div
+                          class="p-col-12 p-md-9"
+                          [innerHTML]="rowData.comment"
+                        >
+                          <span *ngIf="!rowData.comment">Brak uwag</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+
+          <!-- =========================== END POSITIONS TABLE ===============================-->
+        </p-tabPanel>
+
+        <p-tabPanel header="Podgląd" leftIcon="pi pi-search">
+          <app-view-order
+            [productionOrder]="productionOrder"
+            [orderPosition]="orderPosition"
+          >
+          </app-view-order>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ ADDITIONAL DIALOGS ================================-->
+
+<p-dialog
+  header="Drukowanie"
+  [(visible)]="printDialog"
+  styleClass="print_dialog"
+>
+  <div class="sb-dialog-content">
+    <div class="row print_choose_buttons">
+      <div class="col">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Zlecenie produkcyjne"
+          (click)="printOrderProd2()"
+          class="sb-button gray w-100 h-100"
+        ></button>
+      </div>
+    </div>
+  </div>
+  <div class="sb-dialog-footer">
+    <div class="sb-btn-close">
+      <button
+        pButton
+        pRipple
+        type="button"
+        (click)="printDialogExit()"
+        pTooltip="Anulowanie drukowania"
+        label="Anuluj"
+        icon="pi pi-times"
+        class="p-button-sm sb-button o-gray"
+      ></button>
+    </div>
+  </div>
+</p-dialog>

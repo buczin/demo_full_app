@@ -1,0 +1,240 @@
+<div id="print_offer_view">
+  <div class="row header_top">
+    <div class="col address">
+      {{ offer.myCompany.name }}<br />
+      {{ "ul. " + offer.myCompany.street + " " + offer.myCompany.houseNumber
+      }}{{
+        offer.myCompany.flatNumber ? "/" + offer.myCompany.flatNumber : ""
+      }}, {{ offer.myCompany.postalCode + " " + offer.myCompany.town }}<br />
+      {{ offer.myCompany.email ? offer.myCompany.email + ", " : ""
+      }}{{ offer.myCompany.www ? offer.myCompany.www : "" }}
+    </div>
+    <div class="col logo">
+      <div class="float-right" *ngIf="offer.myCompany.logoLink">
+        <img height="50px" [src]="offer.myCompany.logoLink" alt="" />
+      </div>
+      <p *ngIf="!offer.myCompany.logoLink" class="float-right">
+        {{ offer.myCompany.name }}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col client_adress">
+      {{ offer.client.name }} <br />
+      {{ "ul. " + offer.client.street + " " + offer.client.houseNumber
+      }}{{ offer.client.flatNumber ? "/" + offer.client.flatNumber : "" }}<br />
+      {{ offer.client.postalCode + " " + offer.client.town }}
+    </div>
+    <div class="col offer_date">
+      <p>Kraków, dn. {{ offer.offerDate | date: "dd.MM.yyyy" }} r.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text" [innerHTML]="headerText"></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="sb_table">
+        <div [ngClass]="{ warranty_hide: hideWarranty }" class="sb_header">
+          <div class="sb_item">Nazwa i Numer kształownika</div>
+          <div class="sb_item warranty_col">Gwarancja</div>
+          <div class="sb_side">
+            <div class="sb_item">Strona okleinowania</div>
+            <div class="sb_item">Numer okleiny</div>
+            <div class="sb_item">Szerokość oklejanej powierzchni w mm</div>
+            <div class="sb_item">Cena PLN/mb</div>
+            <div class="sb_item">Ilość mb</div>
+            <div class="sb_item">Razem w PLN</div>
+            <div [ngClass]="{ zm_hide: hideZM }" class="sb_additional">
+              <div class="sb_item">Dopłaty PLN</div>
+              <div class="sb_item">U*</div>
+              <div class="sb_item">P*</div>
+              <div class="sb_item zm_col">ZM*</div>
+            </div>
+          </div>
+        </div>
+        <div
+          [ngClass]="{ warranty_hide: hideWarranty }"
+          class="sb_body"
+          *ngFor="let position of offerPositions"
+        >
+          <div class="sb_item">
+            {{ position.profilType }}<br />{{ position.profilNumber }}
+          </div>
+          <div class="sb_item warranty_col">
+            {{ position.warranty ? "" : "NIE" }}
+          </div>
+          <div>
+            <div
+              class="sb_side"
+              *ngFor="let pozSide of position.offerPositionSides"
+            >
+              <div class="sb_item">{{ pozSide.side }}</div>
+              <div class="sb_item">{{ pozSide.filmNumber }}</div>
+              <div class="sb_item">{{ pozSide.filmWidth }}</div>
+              <div class="sb_item">{{ pozSide.plnMb | number: "1.0-2" }}</div>
+              <div class="sb_item">{{ pozSide.quantityMb }}</div>
+              <div class="sb_item">
+                {{ pozSide.togetherPay | number: "1.0-2" }}
+              </div>
+              <div [ngClass]="{ zm_hide: hideZM }" class="sb_additional">
+                <div class="sb_item">
+                  {{ pozSide.costSetup | number: "1.0-2" }}
+                </div>
+                <div class="sb_item">
+                  {{ pozSide.costSet | number: "1.0-2" }}
+                </div>
+                <div class="sb_item zm_col">
+                  {{ pozSide.costChangeColor | number: "1.0-2" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ warranty_hide: hideWarranty }" class="sb_body_sum">
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item title">Suma w PLN</div>
+              <div class="sb_additional_sum1">
+                <div class="sb_item title">Suma dopłat w PLN</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ warranty_hide: hideWarranty }" class="sb_body_sum">
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side_sum">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item">
+                {{ offer.sumAllPositionsPln | number: "1.0-2" }}
+              </div>
+              <div [ngClass]="{ zm_hide: hideZM }" class="sb_additional">
+                <div class="sb_item">
+                  {{ offer.sumSetUpCost | number: "1.0-2" }}
+                </div>
+                <div class="sb_item">
+                  {{ offer.sumSetCost | number: "1.0-2" }}
+                </div>
+                <div class="sb_item zm_col">
+                  {{ offer.sumCostChangeColor | number: "1.0-2" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sum all -->
+        <div [ngClass]="{ warranty_hide: hideWarranty }" class="sb_body_sum">
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side_sumAll">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item title">Razem netto w PLN</div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ warranty_hide: hideWarranty }" class="sb_body_sum">
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side_sumAll">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item">
+                {{ offer.sumAllNetto | number: "1.0-2" }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buy film cost  -->
+        <div
+          [ngClass]="{ warranty_hide: hideWarranty }"
+          class="sb_body_sum"
+          *ngIf="offer.costNettoBuyFilm"
+        >
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side_sumAll">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item title">Zakup okleiny netto w PLN</div>
+            </div>
+          </div>
+        </div>
+        <div
+          [ngClass]="{ warranty_hide: hideWarranty }"
+          class="sb_body_sum"
+          *ngIf="offer.costNettoBuyFilm"
+        >
+          <div></div>
+          <div class="warranty_col"></div>
+          <div>
+            <div class="sb_side_sumAll">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div class="sb_item">
+                {{ offer.costNettoBuyFilm | number: "1.0-2" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row tablefooter-info">
+    <div class="col tablefooter" [innerHtml]="footerInfo"></div>
+  </div>
+
+  <div class="row" *ngIf="offer.costNettoBuyFilm">
+    <div class="col tablefooter-film" [innerHtml]="offer.buyFilmComment"></div>
+  </div>
+
+  <div class="row p-flex-column">
+    <div *ngIf="checkComments()" class="col">
+      <p><b>UWAGI:</b></p>
+    </div>
+    <div class="col comments">
+      <ul>
+        <li *ngFor="let item of offerComments">
+          <span [innerHTML]="item.comment"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col bottom-sign">
+      <p>Z poważaniem,</p>
+      <p>{{ username }}</p>
+    </div>
+  </div>
+</div>

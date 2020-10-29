@@ -1,0 +1,853 @@
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-6 p-0">
+    <div class="card-stats">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="big-icon">
+                <i class="pi pi-inbox"></i>
+              </div>
+            </div>
+            <div class="col-7 pr-0">
+              <div class="numbers">
+                <p class="card-category">Zlecenia</p>
+                <p class="card-title">{{ ordersCount }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats-bar">
+            <div class="small-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="stats-bar-button">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDialogToAddOrder()"
+                pTooltip="Dodanie nowej pozycji"
+                icon="pi pi-plus"
+                class="p-button-sm sb-button blue"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-tabView>
+  <p-tabPanel header="Nowe">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl1
+          styleClass="p-datatable-striped"
+          [value]="allOrdersNew"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [autoLayout]="true"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="zlecenie/{{ rowData.orderNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.orderNumber }}</a
+                >
+              </td>
+
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Oczekuje">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl1
+          styleClass="p-datatable-striped"
+          [value]="allOrdersWaiting"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [autoLayout]="true"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a
+                  routerLink="zlecenie/{{ rowData.orderNumber }}"
+                  (click)="globalService.loadingGlobal = true"
+                  >{{ rowData.orderNumber }}</a
+                >
+              </td>
+
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Realizacja">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl2
+          styleClass="p-datatable-striped"
+          [value]="allOrdersInProgress"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [autoLayout]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a routerLink="zlecenie/{{ rowData.orderNumber }}">{{
+                  rowData.orderNumber
+                }}</a>
+              </td>
+
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Zakończone">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl3
+          styleClass="p-datatable-striped"
+          [value]="allOrdersDone"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [autoLayout]="true"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberFv">
+                Numer Faktury<p-sortIcon field="numberFv"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'numberFv', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze fv"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a routerLink="zlecenie/{{ rowData.orderNumber }}">{{
+                  rowData.orderNumber
+                }}</a>
+              </td>
+              <td>{{ rowData.numberFv }}</td>
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Wydane">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl4
+          styleClass="p-datatable-striped"
+          [value]="allOrdersOut"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [autoLayout]="true"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberFv">
+                Numer Faktury<p-sortIcon field="numberFv"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'numberFv', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze fv"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a routerLink="zlecenie/{{ rowData.orderNumber }}">{{
+                  rowData.orderNumber
+                }}</a>
+              </td>
+              <td>{{ rowData.numberFv }}</td>
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Wszystkie">
+    <div class="row">
+      <div class="col-md-12">
+        <p-table
+          #zl
+          styleClass="p-datatable-striped"
+          [value]="allOrders"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [autoLayout]="true"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{first} do {last} z {totalRecords}"
+          (sortFunction)="customSort($event)"
+          [customSort]="true"
+          sortField="orderNumber"
+          sortOrder="-1"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="row">
+              <div class="col">
+                <span>Zlecenia</span>
+              </div>
+              <div class="col" style="text-align: end">
+                <p-dropdown
+                  #zl
+                  placeholder="Wybierz Status"
+                  (onChange)="loadByStatus(zl.selectedOption.value)"
+                  [options]="optionsSort"
+                  [filter]="true"
+                  filterBy="name,value"
+                  class=""
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr class="pm-head">
+              <th pSortableColumn="orderNumber">
+                Numer Zlecenia<p-sortIcon field="orderNumber"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberFv">
+                Numer Faktury<p-sortIcon field="numberFv"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="numberClientOrder">
+                Numer Zlecenia Klienta<p-sortIcon
+                  field="numberClientOrder"
+                ></p-sortIcon>
+              </th>
+              <th pSortableColumn="client.name">
+                Klient<p-sortIcon field="client.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="myCompany.name">
+                Firma<p-sortIcon field="myCompany.name"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="dateAcceptanceOrder">
+                Data przyjęcia<p-sortIcon field="dateAcceptanceOrder">
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="statusOrder">
+                Status<p-sortIcon field="statusOrder"> </p-sortIcon>
+              </th>
+              <th pSortableColumn="createdBy">
+                Utworzone przez<p-sortIcon field="createdBy"> </p-sortIcon>
+              </th>
+            </tr>
+
+            <tr>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'orderNumber', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze zlecenia"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'numberFv', 'startsWith')
+                  "
+                  placeholder="Szukaj po numerze fv"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter(
+                      $event.target.value,
+                      'numberClientOrder',
+                      'startsWith'
+                    )
+                  "
+                  placeholder="Szukaj po numerze zlecenia klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    zl.filter($event.target.value, 'client.name', 'startsWith')
+                  "
+                  placeholder="Szukaj po nazwie klienta"
+                  class="p-inputtext-sm w-100"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+            <tr class="pm-body">
+              <td>
+                <a routerLink="zlecenie/{{ rowData.orderNumber }}">{{
+                  rowData.orderNumber
+                }}</a>
+              </td>
+              <td>{{ rowData.numberFv }}</td>
+              <td>{{ rowData.numberClientOrder }}</td>
+              <td>{{ rowData.client.name }}</td>
+              <td>{{ rowData.myCompany.name }}</td>
+              <td>{{ rowData.dateAcceptanceOrder }}</td>
+              <td>
+                {{
+                  productionService.statusOrderSwitchLang(rowData.statusOrder)
+                }}
+              </td>
+              <td>{{ rowData.createdBy }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" style="text-align: left">Brak danych.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>

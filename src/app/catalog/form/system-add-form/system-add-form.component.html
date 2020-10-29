@@ -1,0 +1,126 @@
+<div class="sb-dialog-content">
+  <form [formGroup]="formSystem" class="sb-form">
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="systemNameId">Nazwa systemu *</label>
+        <input
+          pInputText
+          id="systemNameId"
+          style="width: 100%"
+          [formControl]="formSystem.get('name')"
+          type="text"
+          required
+        />
+
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formSystem.get('name').hasError('required') &&
+            formSystem.get('name').touched
+          "
+        >
+          musi być wypełnione
+        </p>
+
+        <p
+          class="invalid-feedback"
+          *ngIf="
+            formSystem.get('name').hasError('systemExists') &&
+            formSystem.get('name').touched
+          "
+        >
+          taki system już istnieje
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-g-12 col-md-12 col-lg-12">
+        <label class="sb-small-label" for="desc">Opis</label>
+        <p-editor
+          [formControl]="formSystem.get('comment')"
+          [style]="{ height: '150px' }"
+        >
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Pogrubienie"></button>
+              <button class="ql-italic" aria-label="Kursywa"></button>
+              <button class="ql-underline" aria-label="Podkreślenie"></button>
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Lista uporządkowana"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Lista nieuporządkowana"
+              ></button>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button
+                class="ql-code-block"
+                aria-label="Insert Code Block"
+              ></button>
+            </span>
+          </p-header>
+        </p-editor>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie operacji"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save">
+    <button
+      *ngIf="!systemData"
+      [disabled]="formSystem.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="addNewSystem()"
+      pTooltip="Dodaj nowy system"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <button
+      *ngIf="systemData"
+      [disabled]="formSystem.invalid || loading"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateSystem()"
+      pTooltip="Aktualizacja systemu"
+      label="Zapisz"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

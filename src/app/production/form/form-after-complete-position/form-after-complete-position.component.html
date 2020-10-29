@@ -1,0 +1,391 @@
+<div class="sb-dialog-content add-cost-after-position-done">
+  <form [formGroup]="formAfterDone" class="sb-form">
+    <div *ngIf="!updateCostsSide" class="row w-100 m-0">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+        <span><b>Aktualizuj koszty dla strony</b></span>
+      </div>
+    </div>
+
+    <div *ngIf="!updateCostsSide" class="select-buttons row w-100 m-0 pt-2">
+      <div
+        *ngFor="let item of positionData.postionSide"
+        class="col-sm-12 col-md-12 col-lg-12 p-2 d-flex justify-content-center"
+      >
+        <button
+          style="width: 100px; height: 50px"
+          pButton
+          type="button"
+          (click)="selectSide(item)"
+          [label]="item.side"
+          class="sb-button gray"
+        ></button>
+      </div>
+    </div>
+
+    <div *ngIf="updateCostsSide">
+      <div class="row">
+        <div class="col">
+          <div class="text-center pb-2 pt-3">
+            <span style="text-transform: uppercase">Profil</span>
+          </div>
+          <div class="table-addcost">
+            <table>
+              <thead>
+                <tr>
+                  <th>Numer</th>
+                  <th>Nazwa</th>
+                  <th>ALU</th>
+                  <th>Strona</th>
+                  <th>Nr. okl.</th>
+                  <th>Szer. okl.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{ positionData.profilNumber }}
+                  </td>
+                  <td>
+                    {{ positionData.profilType }}
+                  </td>
+                  <td>
+                    {{ positionData.alu ? "TAK" : "NIE" }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.side }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.filmNumber }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.filmWidth }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="text-center pb-2 pt-3">
+            <span style="text-transform: uppercase">Wymiary</span>
+          </div>
+          <div class="table-addcost">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ilość</th>
+                  <th>Długość (mb)</th>
+                  <th>Suma mb</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of updateCostsSide.profilDimensions">
+                  <td>
+                    {{ item.quantity }}
+                  </td>
+                  <td>
+                    {{ item.length }}
+                  </td>
+                  <td>
+                    {{ item.sumMb }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    {{ updateCostsSide?.sumAllDimensions }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="text-center pb-2 pt-3">
+            <span style="text-transform: uppercase">Zakresy klienta</span>
+          </div>
+          <div class="table-addcost">
+            <table>
+              <thead>
+                <th class="text-left">Metry</th>
+                <th class="text-center">Łatwe (PCV)</th>
+                <th class="text-center">Trudne (PCV)</th>
+                <th class="text-center">Łatwe (ALU)</th>
+                <th class="text-center">Trudne (ALU)</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left">0-50</td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mEasyTo50 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mHardTo50 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mEasyTo50 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mHardTo50 }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-left">51-150</td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mEasyTo150 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mHardTo150 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mEasyTo150 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mHardTo150 }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-left">151-500</td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mEasyTo500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mHardTo500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mEasyTo500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mHardTo500 }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-left">pow. 500</td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mEasyAbove500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_pcv_mHardAbove500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mEasyAbove500 }}
+                  </td>
+                  <td class="text-center">
+                    {{ clientData.helper_alu_mHardAbove500 }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col">
+          <div class="text-center pb-2 pt-3">
+            <span style="text-transform: uppercase">Opcje</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label class="sb-small-label" for="cost">Koszt *</label>
+          <input
+            formControlName="cost"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step=".01"
+            class="w-100"
+            pInputText
+          />
+          <p-checkbox
+            [formControl]="formAfterDone.controls['filmEntrusted']"
+            label="Folia powierzona"
+            (onChange)="costSet()"
+            [binary]="true"
+          ></p-checkbox>
+        </div>
+
+        <div class="col">
+          <label class="sb-small-label" pTooltip="Przelicznik" for="mIs"
+            >Przelicz. *</label
+          >
+          <input
+            formControlName="mIs"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step=".1"
+            class="w-100"
+            pInputText
+          />
+          <p-checkbox
+            [formControl]="formAfterDone.controls['hard']"
+            label="Trudne"
+            (onChange)="changeHard()"
+            [binary]="true"
+          ></p-checkbox>
+        </div>
+
+        <div class="col">
+          <label class="sb-small-label" for="exchangeRate">Kurs *</label>
+          <input
+            formControlName="exchangeRate"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step=".1"
+            class="w-100"
+            pInputText
+          />
+          <!-- <p-checkbox [formControl]="formAfterDone.controls['alu']" label="Alu" (onChange)="changeAlu($event)" [binary]="true"></p-checkbox> -->
+        </div>
+
+        <div class="col">
+          <label
+            class="sb-small-label"
+            pToolTip="Mnożnik procentowy za folię (wpisać ilość %)"
+            for="bicolor"
+            >Dopłata okl. (%)</label
+          >
+          <input
+            formControlName="bicolor"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step="1"
+            class="w-100"
+            pInputText
+          />
+        </div>
+
+        <div class="col">
+          <label class="sb-small-label" for="costChangeColor">Zm. koloru</label>
+          <input
+            formControlName="costChangeColor"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step="1"
+            class="w-100"
+            (ngModelChange)="colorFieldChange($event)"
+            pInputText
+          />
+          <p-checkbox
+            [formControl]="formAfterDone.controls['changeColor']"
+            label="Zmiana koloru"
+            (onChange)="changeColorChangebox($event)"
+            [binary]="true"
+          ></p-checkbox>
+        </div>
+
+        <div class="col">
+          <button
+            pButton
+            type="button"
+            (click)="calculateSide()"
+            label="Oblicz"
+            icon="pi pi-money-bill"
+            class="p-button-sm sb-button blue"
+          ></button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col">
+          <div class="text-center pb-2 pt-3">
+            <span style="text-transform: uppercase">Wynik</span>
+          </div>
+          <div class="table-addcost">
+            <table>
+              <thead>
+                <tr>
+                  <th>PLN/MB</th>
+                  <th>Suma</th>
+                  <th>Cena kpl.</th>
+                  <th>Ustawienie</th>
+                  <th>ZM. KOL.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{ updateCostsSide?.plnMb }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.togetherPay }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.costSet }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.costSetup }}
+                  </td>
+                  <td>
+                    {{ updateCostsSide?.costChangeColor }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col">
+          <label class="sb-small-label" for="comment">Uwagi</label>
+          <p-editor
+            id="comment"
+            [(ngModel)]="commentUpdate"
+            [ngModelOptions]="{ standalone: true }"
+            [style]="{ height: '100px' }"
+          >
+          </p-editor>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="sb-dialog-footer">
+  <div class="sb-btn-close">
+    <button
+      pButton
+      pRipple
+      type="button"
+      (click)="exit(0)"
+      pTooltip="Anulowanie dodawania"
+      label="Anuluj"
+      icon="pi pi-times"
+      class="p-button-sm sb-button o-gray"
+    ></button>
+  </div>
+  <div class="sb-btn-save" *ngIf="updateCostsSide">
+    <button
+      [disabled]="loading || !calculated"
+      pButton
+      pRipple
+      type="button"
+      (click)="updateInfoAfterDone()"
+      pTooltip="Aktualizuj"
+      label="Zapisz wynik"
+      icon="pi pi-check"
+      class="p-button-sm sb-button green"
+    ></button>
+    <p-progressSpinner
+      *ngIf="loading"
+      [style]="{ width: '25px', height: '25px' }"
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+</div>

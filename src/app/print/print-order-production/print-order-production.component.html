@@ -1,0 +1,208 @@
+<div id="production-order-print" #printOrderData class="ml-1">
+  <div class="row header_top p-0">
+    <div class="col mylogo">
+      <div *ngIf="productionOrder?.myCompany.logoLink">
+        <img height="50px" [src]="productionOrder?.myCompany.logoLink" alt="" />
+      </div>
+      <p *ngIf="!productionOrder?.myCompany.logoLink">
+        <b>{{ productionOrder?.myCompany.name }}</b>
+      </p>
+    </div>
+    <div class="col clientlogo">
+      <p>
+        <b>{{ productionOrder?.client.name }}</b>
+      </p>
+    </div>
+  </div>
+
+  <div class="row header_mid p-0 pt-2">
+    <div class="col numbers">
+      <div class="row p-0">
+        <div class="col" style="flex-direction: column; left: 30%">
+          <div>
+            ZLECENIE nr.: <b>{{ productionOrder?.orderNumber }}</b>
+          </div>
+          <div>FAKTURA nr.: <b>........../........../........../FVS</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row header_bottom p-0">
+    <div class="col left">
+      <p>
+        {{
+          productionOrder?.numberClientOrder
+            ? "Zamówienie klienta nr:"
+            : "Zamówienie klienta nr: ..........................."
+        }}
+        {{ productionOrder?.numberClientOrder }}
+      </p>
+    </div>
+    <div class="col"></div>
+  </div>
+
+  <div class="row p-0">
+    <div class="col">
+      <div class="sb_table-or">
+        <div class="sb_header">
+          <div class="sb_item">Nr.</div>
+          <div class="sb_item">Rodzaj profilu</div>
+          <div class="sb_side">
+            <div class="sb_item">Str. Okl.</div>
+            <div class="sb_item">Numer okleiny</div>
+            <div class="sb_item">Szer. Okl.</div>
+            <div class="sb_side_used">
+              <!-- zuz -->
+              <div class="sb_item used_head">Zużycie okleiny</div>
+              <div class="sb_item">Szer.</div>
+              <div class="sb_item">Dł.</div>
+              <div class="sb_item">M<sup>2</sup></div>
+            </div>
+
+            <div class="sb_side_dim">
+              <!-- dl -->
+              <div class="sb_item dim_head">Wymiary</div>
+              <div class="sb_item">Sztuki</div>
+              <div class="sb_item">Dł.</div>
+              <div class="sb_item">Suma MB</div>
+            </div>
+            <!-- <div class="sb_item">Suma MB</div> -->
+            <div class="sb_item">PLN/ MB</div>
+            <div class="sb_item">Cena KPL. 6mb</div>
+            <div class="sb_item">Ust.</div>
+            <div class="sb_item">Zm. kol.</div>
+          </div>
+          <div class="sb_item com">Uwagi</div>
+        </div>
+
+        <div class="sb_body" *ngFor="let item of orderPosition">
+          <div class="sb_item">{{ item.positionNumber }}</div>
+          <div class="sb_item text-left justify-content-start">
+            {{ item.profilType }}<br />{{ item.profilNumber }}
+          </div>
+          <div>
+            <div class="sb_side" *ngFor="let sides of item.postionSide">
+              <div class="sb_item">{{ sides.side }}</div>
+              <div class="sb_item">{{ sides.filmNumber }}</div>
+              <div class="sb_item film">
+                {{ sides.filmWidth }} <sub>mm</sub>
+              </div>
+              <div class="used_col" *ngIf="sides.usedFilm.length != 0">
+                <!-- zuz -->
+                <div class="sb_side_used" *ngFor="let used of sides.usedFilm">
+                  <div class="sb_item">{{ used.width }}</div>
+                  <div class="sb_item">{{ used.length }}</div>
+                  <div class="sb_item">{{ used.sumM2 }}</div>
+                </div>
+              </div>
+
+              <div class="used_col" *ngIf="sides.usedFilm.length == 0">
+                <!-- zuz -->
+                <div class="sb_side_used">
+                  <div class="sb_item"></div>
+                  <div class="sb_item"></div>
+                  <div class="sb_item"></div>
+                </div>
+              </div>
+
+              <div class="dim_col">
+                <!-- dl -->
+                <div
+                  class="sb_side_dim"
+                  *ngFor="let dim of sides.profilDimensions"
+                >
+                  <div class="sb_item">{{ dim.quantity }}</div>
+                  <div class="sb_item">{{ dim.length }}</div>
+                  <div class="sb_item">{{ dim.sumMb }} <sub>mb</sub></div>
+                </div>
+              </div>
+
+              <div class="sb_item">
+                {{ sides.plnMb != 0 ? sides.plnMb : "" }}
+              </div>
+              <div class="sb_item">
+                {{ sides.costSet6Mb != 0 ? sides.costSet6Mb : "" }}
+              </div>
+              <div class="sb_item">
+                {{ sides.costSetup != 0 ? sides.costSetup : "" }}
+              </div>
+              <div class="sb_item">
+                {{ sides.costColorChange != 0 ? sides.costColorChange : "" }}
+              </div>
+            </div>
+          </div>
+          <div class="sb_item com" [innerHTML]="item.comment"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row p-0 pt-4">
+    <div class="col">
+      <div class="footer">
+        <div class="row p-0 m-0" style="font-size: 14px">
+          <div class="col">
+            <div class="row p-0 m-0">
+              <div
+                class="col text-left justify-content-start"
+                style="display: grid"
+              >
+                <div class="pb-1">
+                  <span
+                    >DATA PRZYJĘCIA:
+                    <b>{{ productionOrder?.dateAcceptanceOrder }}</b></span
+                  >
+                </div>
+                <div class="pb-3">
+                  <span
+                    >Potwierdzam zgodność danych <br />
+                    do wykonania zlecenia</span
+                  >
+                </div>
+                <div>
+                  <span>................................................</span
+                  ><br /><span>(czytelny podpis odbierającego)</span>
+                </div>
+              </div>
+
+              <div
+                class="col text-left justify-content-start"
+                style="display: grid"
+              >
+                <div><span>DATA WYKONANIA: </span></div>
+                <div>
+                  <b>{{ productionOrder?.dateCompletedOrder }}</b>
+                </div>
+                <div>
+                  <span>................................................</span>
+                </div>
+              </div>
+              <div
+                class="col text-left justify-content-center"
+                style="display: grid"
+              >
+                <div class="pb-1">
+                  <span
+                    >DATA ODBIORU:
+                    <b>{{ productionOrder?.dateReceiptOrder }}</b></span
+                  >
+                </div>
+                <div class="pb-3">
+                  <span
+                    >Potwierdzam odbiór zgodnie <br />
+                    z ilością i jakością</span
+                  >
+                </div>
+                <div>
+                  <span>................................................</span
+                  ><br /><span>(czytelny podpis zlecającego)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

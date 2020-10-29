@@ -1,0 +1,268 @@
+#print_offer {
+    padding: 1rem;
+
+    .row {
+        padding-top: 1rem;
+        &.tablefooter-info {
+            transform: translateY(-90px);
+            height: 0;
+        }
+        .col {
+            display: flex;
+            &.client_adress {
+                font-weight: bold;
+                font-size: 16px;
+                justify-content: flex-start;
+            }
+            &.offer_date {
+                justify-content: flex-end;
+            }
+            &.text {
+                font-size: 16px;
+                margin-top: 1rem !important;
+                margin-bottom: 1rem !important;
+                display: block;
+                p {
+                    margin-bottom: 0rem !important;
+                }
+            }
+            &.tablefooter {
+                font-size: 16px;
+                display: block;
+                margin-bottom: 1rem !important;
+                p {
+                    margin-bottom: 0rem !important;
+                }
+            }
+            &.comments {
+                padding-left: 0;
+            }
+        }
+        &.header_top {
+            padding-top: 0;
+            border-bottom: 1px solid;
+            padding-bottom: 1rem;
+            .col {
+                display: flex;
+                &.adress {
+                    justify-content: flex-start;
+                }
+                &.logo {
+                    justify-content: flex-end;
+                }
+            }
+        }
+    }
+
+    .sb_table {
+        margin: 0 auto;
+        .sb_header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 8fr;
+            border-bottom: 1px solid;
+            &.warranty_hide {
+                grid-template-columns: 2fr 8fr !important;
+                .warranty_col {
+                    display: none !important;
+                }
+            }
+            .sb_item {
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+            }
+            .sb_side {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                    font-weight: bold;
+                }
+                .sb_additional {
+                    display: grid;
+                    &.zm_hide {
+                        div:first-child {
+                            grid-column: 1 / 3 !important;
+                        }
+                        .zm_col {
+                            display: none !important;
+                        }
+                    }
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                    }
+                    div:first-child {
+                        grid-column: 1 / 4;
+                        align-items: flex-end;
+                    }
+                }
+            }
+        }
+        .sb_body:first-child {
+            background-color: aqua;
+        }
+        .sb_body {
+            display: grid;
+            grid-template-columns: 2fr 1fr 8fr;
+            border-bottom: 1px solid;
+            &.warranty_hide {
+                grid-template-columns: 2fr 8fr !important;
+                .warranty_col {
+                    display: none !important;
+                }
+            }
+            .sb_item {
+                display: flex;
+                align-items: center;
+            }
+            .sb_side_sumAll {
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+            .sb_side {
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                border-top: 1px dotted;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                }
+                .sb_additional {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    &.zm_hide {
+                        grid-template-columns: 1fr 1fr !important;
+                        .zm_col {
+                            display: none !important;
+                        }
+                    }
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+                .sb_additional_sum1 {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+            .sb_side:first-child {
+                border-top: 0px;
+            }
+        }
+        .sb_body_sum {
+            display: grid;
+            grid-template-columns: 2fr 1fr 8fr;
+            &.warranty_hide {
+                grid-template-columns: 2fr 8fr !important;
+                .warranty_col {
+                    display: none !important;
+                }
+            }
+            .sb_item {
+                display: flex;
+                align-items: center;
+            }
+            .sb_side_sumAll {
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-bottom: 1px solid;
+                    &.title {
+                        font-weight: bold;
+                    }
+                }
+            }
+            .sb_side_sum {
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-bottom: 1px solid;
+                    &.title {
+                        font-weight: bold;
+                    }
+                }
+                .sb_additional {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    &.zm_hide {
+                        grid-template-columns: 1fr 1fr !important;
+                        .zm_col {
+                            display: none !important;
+                        }
+                    }
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-bottom: 1px solid;
+                    }
+                }
+            }
+            .sb_side {
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                .sb_item {
+                    display: flex;
+                    align-items: center;
+                    border-bottom: 1px solid;
+                    &.title {
+                        font-weight: bold;
+                    }
+                }
+                .sb_additional {
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        border-bottom: 1px solid;
+                    }
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                }
+                .sb_additional_sum1 {
+                    .sb_item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-bottom: 1px solid;
+                    }
+                    display: grid;
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+    }
+    .bottom-sign {
+        text-align: right;
+        display: block !important;
+        p {
+            padding-bottom: 0.5rem;
+        }
+    }
+}
